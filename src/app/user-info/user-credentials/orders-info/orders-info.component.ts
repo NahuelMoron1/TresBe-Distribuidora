@@ -7,6 +7,7 @@ import { OrderXProductsXOxpService } from 'src/app/services/order-x-products-x-o
 import { OrdersXProductsService } from 'src/app/services/orders-x-products.service';
 import { OrdersService } from 'src/app/services/orders.service';
 import { ProductService } from 'src/app/services/product.service';
+import { UserDisplayService } from 'src/app/services/user-display.service';
 
 @Component({
   selector: 'app-orders-info',
@@ -19,11 +20,13 @@ export class OrdersInfoComponent implements OnInit{
   orderxproductsxoxpService = inject(OrderXProductsXOxpService);
   ordersAndProducts: OrdersAndProducts[] = [];
   oxpHtml: OrdersAndProducts[] = [];
+  displayService = inject(UserDisplayService);
   
   async ngOnInit() {
       (await this.orderxproductsxoxpService.getProducts()).subscribe(products => {
         this.ordersAndProducts = products;
       })
+    this.orderxproductsxoxpService.ordenacionPorInsercion();
       this.limitOxp();
   }
   limitOxp(){
@@ -32,11 +35,21 @@ export class OrdersInfoComponent implements OnInit{
     }
   }
 
-  getDates(orderDate: Date){
-    let day = orderDate.getDate();
-    let month = orderDate.getMonth();
-    let year = orderDate.getFullYear();
-
-    return day + month + year;
+  changeDisplay(name: string, orderID: string){
+    this.orderxproductsxoxpService.selectOrder(orderID);
+    this.displayService.changeDisplay(name);
   }
+
+  getDates(orderDate: Date): string {
+    let newDate = new Date(orderDate);
+    if (!(newDate instanceof Date) || isNaN(newDate.getTime())) {
+        throw new Error("Invalid date");
+    }
+    
+    let day = newDate.getDate().toString().padStart(2, '0');
+    let month = (newDate.getMonth() + 1).toString().padStart(2, '0');
+    let year = newDate.getFullYear().toString();
+
+    return `${day}/${month}/${year}`;
+}
 }

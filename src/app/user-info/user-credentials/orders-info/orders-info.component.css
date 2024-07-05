@@ -32,6 +32,7 @@ h1{
     transform: scale(1.05);
 }
 #dateCode{
+    margin-bottom: -10px;
     display: flex;
     justify-content: space-between;
 }
