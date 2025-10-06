@@ -5,9 +5,10 @@ import { CookieService } from 'src/app/services/cookie.service';
 import { UserDisplayService } from 'src/app/services/user-display.service';
 
 @Component({
-  selector: 'app-options-user',
-  templateUrl: './options-user.component.html',
-  styleUrls: ['./options-user.component.css']
+    selector: 'app-options-user',
+    templateUrl: './options-user.component.html',
+    styleUrls: ['./options-user.component.css'],
+    standalone: false
 })
 export class OptionsUserComponent implements OnInit{
   displayService = inject(UserDisplayService);

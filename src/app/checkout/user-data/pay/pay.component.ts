@@ -16,9 +16,10 @@ import { PublicUser } from 'src/app/models/PublicUser';
 import { CookieService } from 'src/app/services/cookie.service';
 
 @Component({
-  selector: 'app-pay',
-  templateUrl: './pay.component.html',
-  styleUrls: ['./pay.component.css']
+    selector: 'app-pay',
+    templateUrl: './pay.component.html',
+    styleUrls: ['./pay.component.css'],
+    standalone: false
 })
 export class PayComponent {
   router = inject(Router);

@@ -3,9 +3,10 @@ import { Product } from 'src/app/models/Product';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-discount-products',
-  templateUrl: './discount-products.component.html',
-  styleUrls: ['./discount-products.component.css']
+    selector: 'app-discount-products',
+    templateUrl: './discount-products.component.html',
+    styleUrls: ['./discount-products.component.css'],
+    standalone: false
 })
 export class DiscountProductsComponent implements OnInit{
   productService = inject(ProductService);

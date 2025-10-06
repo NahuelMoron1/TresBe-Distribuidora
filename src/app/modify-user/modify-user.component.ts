@@ -4,9 +4,10 @@ import { User } from '../models/User';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-modify-user',
-  templateUrl: './modify-user.component.html',
-  styleUrls: ['./modify-user.component.css']
+    selector: 'app-modify-user',
+    templateUrl: './modify-user.component.html',
+    styleUrls: ['./modify-user.component.css'],
+    standalone: false
 })
 export class ModifyUserComponent implements OnInit{
   priceArray: string[] = ['G','E','1','2','3','4'];

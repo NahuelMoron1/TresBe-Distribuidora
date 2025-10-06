@@ -2,9 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
-  selector: 'app-checkout-options',
-  templateUrl: './checkout-options.component.html',
-  styleUrls: ['./checkout-options.component.css']
+    selector: 'app-checkout-options',
+    templateUrl: './checkout-options.component.html',
+    styleUrls: ['./checkout-options.component.css'],
+    standalone: false
 })
 export class CheckoutOptionsComponent implements OnInit{
   discount: number = 0;

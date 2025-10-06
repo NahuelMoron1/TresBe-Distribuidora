@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-company-data',
-  templateUrl: './company-data.component.html',
-  styleUrls: ['./company-data.component.css']
+    selector: 'app-company-data',
+    templateUrl: './company-data.component.html',
+    styleUrls: ['./company-data.component.css'],
+    standalone: false
 })
 export class CompanyDataComponent {
 

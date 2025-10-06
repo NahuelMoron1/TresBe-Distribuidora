@@ -3,9 +3,10 @@ import { Cupon } from 'src/app/models/Cupon';
 import { CouponService } from 'src/app/services/coupon.service';
 
 @Component({
-  selector: 'app-search-coupon',
-  templateUrl: './search-coupon.component.html',
-  styleUrls: ['./search-coupon.component.css']
+    selector: 'app-search-coupon',
+    templateUrl: './search-coupon.component.html',
+    styleUrls: ['./search-coupon.component.css'],
+    standalone: false
 })
 export class SearchCouponComponent implements OnInit{
   notFound: boolean = false;

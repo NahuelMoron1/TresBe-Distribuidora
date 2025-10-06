@@ -6,9 +6,10 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { UserDisplayService } from 'src/app/services/user-display.service';
 
 @Component({
-  selector: 'app-orders-info',
-  templateUrl: './orders-info.component.html',
-  styleUrls: ['./orders-info.component.css']
+    selector: 'app-orders-info',
+    templateUrl: './orders-info.component.html',
+    styleUrls: ['./orders-info.component.css'],
+    standalone: false
 })
 export class OrdersInfoComponent implements OnInit{
   orderService = inject(OrdersService);

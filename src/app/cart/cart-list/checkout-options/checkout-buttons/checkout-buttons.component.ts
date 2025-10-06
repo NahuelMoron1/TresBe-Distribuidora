@@ -13,9 +13,10 @@ import { UserXcouponService } from 'src/app/services/user-xcoupon.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-checkout-buttons',
-  templateUrl: './checkout-buttons.component.html',
-  styleUrls: ['./checkout-buttons.component.css']
+    selector: 'app-checkout-buttons',
+    templateUrl: './checkout-buttons.component.html',
+    styleUrls: ['./checkout-buttons.component.css'],
+    standalone: false
 })
 export class CheckoutButtonsComponent implements OnInit{
   orderService = inject(OrdersService);

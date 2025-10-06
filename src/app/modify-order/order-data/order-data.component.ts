@@ -11,9 +11,10 @@ import { OrdersXProductsService } from 'src/app/services/orders-x-products.servi
 import { OrdersService } from 'src/app/services/orders.service';
 
 @Component({
-  selector: 'app-order-data',
-  templateUrl: './order-data.component.html',
-  styleUrls: ['./order-data.component.css']
+    selector: 'app-order-data',
+    templateUrl: './order-data.component.html',
+    styleUrls: ['./order-data.component.css'],
+    standalone: false
 })
 export class OrderDataComponent implements OnInit{
   activeRoute = inject(ActivatedRoute);

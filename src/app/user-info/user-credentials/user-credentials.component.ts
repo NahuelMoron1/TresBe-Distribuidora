@@ -5,9 +5,10 @@ import { CookieService } from 'src/app/services/cookie.service';
 import { UserDisplayService } from 'src/app/services/user-display.service';
 
 @Component({
-  selector: 'app-user-credentials',
-  templateUrl: './user-credentials.component.html',
-  styleUrls: ['./user-credentials.component.css']
+    selector: 'app-user-credentials',
+    templateUrl: './user-credentials.component.html',
+    styleUrls: ['./user-credentials.component.css'],
+    standalone: false
 })
 export class UserCredentialsComponent implements OnInit{
   displayService = inject(UserDisplayService);

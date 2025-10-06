@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DiscountsService } from 'src/app/services/discounts.service';
 
 @Component({
-  selector: 'app-discount-messages',
-  templateUrl: './discount-messages.component.html',
-  styleUrls: ['./discount-messages.component.css']
+    selector: 'app-discount-messages',
+    templateUrl: './discount-messages.component.html',
+    styleUrls: ['./discount-messages.component.css'],
+    standalone: false
 })
 export class DiscountMessagesComponent implements OnInit{
   added: boolean = false;

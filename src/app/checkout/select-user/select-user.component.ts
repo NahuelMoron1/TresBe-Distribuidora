@@ -9,9 +9,10 @@ import { UserService } from 'src/app/services/user.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-select-user',
-  templateUrl: './select-user.component.html',
-  styleUrls: ['./select-user.component.css']
+    selector: 'app-select-user',
+    templateUrl: './select-user.component.html',
+    styleUrls: ['./select-user.component.css'],
+    standalone: false
 })
 export class SelectUserComponent implements OnInit {
   userService = inject(UserService);

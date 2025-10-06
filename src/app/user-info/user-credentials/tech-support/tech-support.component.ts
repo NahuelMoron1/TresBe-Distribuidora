@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { EmailService } from 'src/app/services/email.service';
 
 @Component({
-  selector: 'app-tech-support',
-  templateUrl: './tech-support.component.html',
-  styleUrls: ['./tech-support.component.css']
+    selector: 'app-tech-support',
+    templateUrl: './tech-support.component.html',
+    styleUrls: ['./tech-support.component.css'],
+    standalone: false
 })
 export class TechSupportComponent {
   emailService = inject(EmailService);

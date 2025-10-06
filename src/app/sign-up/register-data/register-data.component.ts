@@ -5,9 +5,10 @@ import { CookieService } from 'src/app/services/cookie.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-register-data',
-  templateUrl: './register-data.component.html',
-  styleUrls: ['./register-data.component.css']
+    selector: 'app-register-data',
+    templateUrl: './register-data.component.html',
+    styleUrls: ['./register-data.component.css'],
+    standalone: false
 })
 export class RegisterDataComponent implements OnInit {
   emailFormat: boolean = true;

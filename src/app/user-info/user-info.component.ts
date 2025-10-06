@@ -5,9 +5,10 @@ import { adminGuard } from '../guards/admin.guard';
 import { CookieService } from '../services/cookie.service';
 
 @Component({
-  selector: 'app-user-info',
-  templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.css']
+    selector: 'app-user-info',
+    templateUrl: './user-info.component.html',
+    styleUrls: ['./user-info.component.css'],
+    standalone: false
 })
 export class UserInfoComponent implements OnInit{
   oxpService = inject(OrderXProductsXOxpService);

@@ -4,9 +4,10 @@ import { Cupon } from 'src/app/models/Cupon';
 import { CouponService } from 'src/app/services/coupon.service';
 
 @Component({
-  selector: 'app-coupon-data',
-  templateUrl: './coupon-data.component.html',
-  styleUrls: ['./coupon-data.component.css']
+    selector: 'app-coupon-data',
+    templateUrl: './coupon-data.component.html',
+    styleUrls: ['./coupon-data.component.css'],
+    standalone: false
 })
 export class CouponDataComponent implements OnInit{
   couponService = inject(CouponService);

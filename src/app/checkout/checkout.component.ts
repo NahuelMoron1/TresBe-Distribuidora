@@ -3,9 +3,10 @@ import { CookieService } from '../services/cookie.service';
 import { PublicUser } from '../models/PublicUser';
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.css']
+    selector: 'app-checkout',
+    templateUrl: './checkout.component.html',
+    styleUrls: ['./checkout.component.css'],
+    standalone: false
 })
 export class CheckoutComponent implements OnInit{
   cookieService = inject(CookieService);

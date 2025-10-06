@@ -5,9 +5,10 @@ import { UserDisplayService } from 'src/app/services/user-display.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-privacity',
-  templateUrl: './privacity.component.html',
-  styleUrls: ['./privacity.component.css']
+    selector: 'app-privacity',
+    templateUrl: './privacity.component.html',
+    styleUrls: ['./privacity.component.css'],
+    standalone: false
 })
 export class PrivacityComponent implements OnInit{
   user: PublicUser = new PublicUser('', '', '','',false,'');

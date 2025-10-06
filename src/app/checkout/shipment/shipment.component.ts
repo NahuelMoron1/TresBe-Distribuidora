@@ -12,9 +12,10 @@ import { ProvinceService } from 'src/app/services/province.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-shipment',
-  templateUrl: './shipment.component.html',
-  styleUrls: ['./shipment.component.css']
+    selector: 'app-shipment',
+    templateUrl: './shipment.component.html',
+    styleUrls: ['./shipment.component.css'],
+    standalone: false
 })
 export class ShipmentComponent implements OnInit{
   city: string = "Mar Del Plata";

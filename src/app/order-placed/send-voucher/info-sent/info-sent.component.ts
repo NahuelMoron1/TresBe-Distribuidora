@@ -2,9 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { VoucherService } from 'src/app/services/voucher.service';
 
 @Component({
-  selector: 'app-info-sent',
-  templateUrl: './info-sent.component.html',
-  styleUrls: ['./info-sent.component.css']
+    selector: 'app-info-sent',
+    templateUrl: './info-sent.component.html',
+    styleUrls: ['./info-sent.component.css'],
+    standalone: false
 })
 export class InfoSentComponent implements OnInit {
   imgURL = '../../../../assets/gym';

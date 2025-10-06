@@ -11,9 +11,10 @@ import { ProvinceJSON } from 'src/app/models/provinceJSON';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-shipment-information',
-  templateUrl: './shipment-information.component.html',
-  styleUrls: ['./shipment-information.component.css']
+    selector: 'app-shipment-information',
+    templateUrl: './shipment-information.component.html',
+    styleUrls: ['./shipment-information.component.css'],
+    standalone: false
 })
 export class ShipmentInformationComponent implements OnInit{
   userID: string = "";

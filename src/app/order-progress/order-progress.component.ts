@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-order-progress',
-  templateUrl: './order-progress.component.html',
-  styleUrls: ['./order-progress.component.css']
+    selector: 'app-order-progress',
+    templateUrl: './order-progress.component.html',
+    styleUrls: ['./order-progress.component.css'],
+    standalone: false
 })
 export class OrderProgressComponent {
   reserved: boolean = true;

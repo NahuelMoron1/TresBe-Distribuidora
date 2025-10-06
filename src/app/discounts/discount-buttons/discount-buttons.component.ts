@@ -12,9 +12,10 @@ import { ProgressService } from 'src/app/services/progress.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-discount-buttons',
-  templateUrl: './discount-buttons.component.html',
-  styleUrls: ['./discount-buttons.component.css']
+    selector: 'app-discount-buttons',
+    templateUrl: './discount-buttons.component.html',
+    styleUrls: ['./discount-buttons.component.css'],
+    standalone: false
 })
 export class DiscountButtonsComponent implements OnInit{
   brandService = inject(BrandsService);

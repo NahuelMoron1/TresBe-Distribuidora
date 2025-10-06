@@ -2,9 +2,10 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-user-options',
-  templateUrl: './user-options.component.html',
-  styleUrls: ['./user-options.component.css']
+    selector: 'app-user-options',
+    templateUrl: './user-options.component.html',
+    styleUrls: ['./user-options.component.css'],
+    standalone: false
 })
 export class UserOptionsComponent implements OnInit{
   router = inject(Router);

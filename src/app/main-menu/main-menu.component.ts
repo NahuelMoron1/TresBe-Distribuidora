@@ -3,9 +3,10 @@ import { PublicUser } from '../models/PublicUser';
 import { CookieService } from '../services/cookie.service';
 
 @Component({
-  selector: 'app-main-menu',
-  templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.css']
+    selector: 'app-main-menu',
+    templateUrl: './main-menu.component.html',
+    styleUrls: ['./main-menu.component.css'],
+    standalone: false
 })
 
 export class MainMenuComponent implements OnInit{

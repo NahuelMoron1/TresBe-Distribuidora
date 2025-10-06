@@ -3,9 +3,10 @@ import { Category } from 'src/app/models/Category';
 import { CategoriesService } from 'src/app/services/categories.service';
 
 @Component({
-  selector: 'app-category-item',
-  templateUrl: './category-item.component.html',
-  styleUrls: ['./category-item.component.css']
+    selector: 'app-category-item',
+    templateUrl: './category-item.component.html',
+    styleUrls: ['./category-item.component.css'],
+    standalone: false
 })
 export class CategoryItemComponent implements OnInit{
   categoryService = inject(CategoriesService);

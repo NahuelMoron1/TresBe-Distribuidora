@@ -6,9 +6,10 @@ import { CookieService } from '../services/cookie.service';
 import { PublicUser } from '../models/PublicUser';
 
 @Component({
-  selector: 'app-order-placed',
-  templateUrl: './order-placed.component.html',
-  styleUrls: ['./order-placed.component.css']
+    selector: 'app-order-placed',
+    templateUrl: './order-placed.component.html',
+    styleUrls: ['./order-placed.component.css'],
+    standalone: false
 })
 export class OrderPlacedComponent implements OnInit{
     orderService = inject(OrdersService);

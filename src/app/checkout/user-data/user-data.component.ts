@@ -3,9 +3,10 @@ import { Product } from 'src/app/models/Product';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
-  selector: 'app-user-data',
-  templateUrl: './user-data.component.html',
-  styleUrls: ['./user-data.component.css']
+    selector: 'app-user-data',
+    templateUrl: './user-data.component.html',
+    styleUrls: ['./user-data.component.css'],
+    standalone: false
 })
 export class UserDataComponent implements OnInit{
   cartService = inject(CartService);

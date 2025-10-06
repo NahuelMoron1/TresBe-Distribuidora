@@ -5,9 +5,10 @@ import { CategoriesService } from 'src/app/services/categories.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-search-bar',
-  templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css']
+    selector: 'app-search-bar',
+    templateUrl: './search-bar.component.html',
+    styleUrls: ['./search-bar.component.css'],
+    standalone: false
 })
 export class SearchBarComponent implements OnInit{
   searchTerm: string = '';

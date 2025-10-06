@@ -6,9 +6,10 @@ import { CookieService } from 'src/app/services/cookie.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-select-brand',
-  templateUrl: './select-brand.component.html',
-  styleUrls: ['./select-brand.component.css']
+    selector: 'app-select-brand',
+    templateUrl: './select-brand.component.html',
+    styleUrls: ['./select-brand.component.css'],
+    standalone: false
 })
 export class SelectBrandComponent implements OnInit {
   brandService = inject(BrandsService);

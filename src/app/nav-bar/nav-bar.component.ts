@@ -5,9 +5,10 @@ import { CookieService } from '../services/cookie.service';
 import { UserService } from '../services/user.service';
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    styleUrls: ['./nav-bar.component.css'],
+    standalone: false
 })
 export class NavBarComponent implements OnInit{
   cartService = inject(CartService);
