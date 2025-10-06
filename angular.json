@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "tresbeApp:build:production"
+              "buildTarget": "tresbeApp:build:production"
             },
             "development": {
-              "browserTarget": "tresbeApp:build:development"
+              "buildTarget": "tresbeApp:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tresbeApp:build"
+            "buildTarget": "tresbeApp:build"
           }
         },
         "test": {
