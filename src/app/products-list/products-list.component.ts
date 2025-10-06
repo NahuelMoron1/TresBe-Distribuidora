@@ -1,20 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ProductService } from '../services/product.service';
-import { Product } from '../models/Product';
 import { ActivatedRoute } from '@angular/router';
-import { CartService } from '../services/cart.service';
-import { OptionsService } from '../services/options.service';
-import { BrandsService } from '../services/brands.service';
-import { CategoriesService } from '../services/categories.service';
-import Swal from 'sweetalert2';
+import { Product } from '../models/Product';
 import { PublicUser } from '../models/PublicUser';
+import { BrandsService } from '../services/brands.service';
+import { CartService } from '../services/cart.service';
+import { CategoriesService } from '../services/categories.service';
 import { CookieService } from '../services/cookie.service';
+import { OptionsService } from '../services/options.service';
+import { ProductService } from '../services/product.service';
 
 @Component({
-    selector: 'app-products-list',
-    templateUrl: './products-list.component.html',
-    styleUrls: ['./products-list.component.css'],
-    standalone: false
+  selector: 'app-products-list',
+  templateUrl: './products-list.component.html',
+  styleUrls: ['./products-list.component.css'],
+  standalone: false,
 })
 export class ProductsListComponent implements OnInit {
   productsArray: Array<Product> = [];
@@ -34,12 +33,14 @@ export class ProductsListComponent implements OnInit {
   brandService = inject(BrandsService);
   admin: PublicUser = new PublicUser('', '', '', '', false, '');
   cookieService = inject(CookieService);
+  //toastSvc = inject(SkyToastService);
   async ngOnInit() {
     window.scrollTo(0, 0);
     await this.filters();
     (await this.cookieService.getAdmin()).subscribe((data) => {
       this.admin = data;
     });
+    //UtilsService.openToast(this.toastSvc, 'HELLOOO', SkyToastType.Success);
     ///this.hasCostPrice();
   }
   goToModify(productID: string) {
