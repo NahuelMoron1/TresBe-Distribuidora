@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^19.2.15",
     "@angular/platform-browser-dynamic": "^19.2.15",
     "@angular/router": "^19.2.15",
+    "@skyux/toast": "^12.42.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
