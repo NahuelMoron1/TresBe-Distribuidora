@@ -16,7 +16,7 @@
     <div class="product-page">
       <div class="product-title">{{productSelected.name}}</div>
       <div class="product-code">Categoría: {{productSelected.category}}</div>
-      <div class="price" [ngClass]="{'tacched': productSelected.discount > 0}">${{formatNumber(productSelected.price)}}
+      <div class="price" [ngClass]="{'tacched': productSelected.discount > 0}">{{productSelected.price | currency:'':'symbol':'1.2-2'}}
       </div>
       <div class="price" *ngIf="productSelected.discount > 0">${{productSelected.priceDiscount.toFixed(1)}}</div>
       <div class="add-to-bag" (click)="addToCart()" *ngIf="!onCart">Añadir al carrito</div>

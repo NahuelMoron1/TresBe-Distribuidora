@@ -1,155 +1,281 @@
 <body>
-    <div id="added" class="alerts" *ngIf="added"><i class="fa fa-check-circle fa-3x" aria-hidden="true"></i><p> Producto cargado con exito</p></div>
-    <div id="modified" class="alerts" *ngIf="modified && !toModify"><i class="fa fa-check-circle fa-3x" aria-hidden="true"></i><p> Producto modificado con exito</p></div>
-    <div id="optionModified" class="alerts" *ngIf="optionUpdated"><i class="fa fa-check-circle fa-3x" aria-hidden="true"></i> Opción del producto modificada</div>
-    <div id="container">
-        <h1>CARGA DE PRODUCTOS</h1>
-        <div class="data">
-            <div class="dataText">
-                <label for="name">Nombre de Producto *</label>
-                <input type="text" class="productInfo" name="name" [value]="getValue('name')" id="nameInp">
-    
-                <label for="category">Categoría *</label>
-                <input type="text" class="productInfo" name="category" [value]="getValue('category')" id="categoryInp">
-    
-                <label for="brand">Marca *</label>
+  <div id="added" class="alerts" *ngIf="added">
+    <i class="fa fa-check-circle fa-3x" aria-hidden="true"></i>
+    <p>Producto cargado con exito</p>
+  </div>
+  <div id="modified" class="alerts" *ngIf="modified && !toModify">
+    <i class="fa fa-check-circle fa-3x" aria-hidden="true"></i>
+    <p>Producto modificado con exito</p>
+  </div>
+  <div id="optionModified" class="alerts" *ngIf="optionUpdated">
+    <i class="fa fa-check-circle fa-3x" aria-hidden="true"></i> Opción del
+    producto modificada
+  </div>
+  <div id="container">
+    <h1>CARGA DE PRODUCTOS</h1>
+    <div class="data">
+      <div class="dataText">
+        <label for="name">Nombre de Producto *</label>
+        <input
+          type="text"
+          class="productInfo"
+          name="name"
+          [value]="getValue('name')"
+          id="nameInp"
+        />
 
-                <select name="brand" class="productInfo" [(ngModel)]="brand" id="brandSelect" (change)="changeBrand($event)">
-                    <option *ngFor="let brand of brands" [value]="brand.name" >{{brand.name}}</option>
-                </select>
-    
-                <label for="image">Imagen *</label>
-                <input type="text" name="image" class="productInfo" [value]="getValue('image')" id="imageInp">
-    
-            </div>
-    
-            <div id="prices">
-                <label for="discount">Descuento (En porcentaje, ejemplo 0.05)</label>
-                <input type="number" name="discount" class="productInfo" [value]="getValue('discount')" id="discountInp">
+        <label for="category">Categoría *</label>
+        <select
+          name="category"
+          class="productInfo"
+          [(ngModel)]="category"
+          id="categorySelect"
+          (change)="changeCategory($event)"
+        >
+          <option *ngFor="let category of categories" [value]="category.name">
+            {{ category.name }}
+          </option>
+        </select>
 
-                <label for="description">Descripción</label>
-                <input type="text" name="description" class="productInfo" [value]="getValue('description')" id="descriptionInp">
-    
-                <label for="stock">Stock</label>
-                <input type="number" name="stock" class="productInfo" [value]="getValue('stock')" id="stockInpAux">
-    
-                <button *ngIf="(!onModify)" (click)="addNewProduct()">AGREGAR</button>
-                <button *ngIf="onModify && !toModify" (click)="modify()">MODIFICAR</button>
-                <button *ngIf="toModify" (click)="modifyOneProduct()">CAMBIAR</button>
-            </div>
-        </div>
+        <label for="brand">Marca *</label>
+
+        <select
+          name="brand"
+          class="productInfo"
+          [(ngModel)]="brand"
+          id="brandSelect"
+          (change)="changeBrand($event)"
+        >
+          <option *ngFor="let brand of brands" [value]="brand.name">
+            {{ brand.name }}
+          </option>
+        </select>
+
+        <label for="image">Imagen *</label>
+        <input
+          type="text"
+          name="image"
+          class="productInfo"
+          [value]="getValue('image')"
+          id="imageInp"
+        />
+      </div>
+
+      <div id="prices">
+        <label for="discount">Descuento (En porcentaje, ejemplo 0.05)</label>
+        <input
+          type="number"
+          name="discount"
+          class="productInfo"
+          [value]="getValue('discount')"
+          id="discountInp"
+        />
+
+        <label for="description">Descripción</label>
+        <input
+          type="text"
+          name="description"
+          class="productInfo"
+          [value]="getValue('description')"
+          id="descriptionInp"
+        />
+
+        <label for="stock">Stock</label>
+        <input
+          type="number"
+          name="stock"
+          class="productInfo"
+          [value]="getValue('stock')"
+          id="stockInpAux"
+        />
+
+        <button *ngIf="!onModify" (click)="addNewProduct()">AGREGAR</button>
+        <button *ngIf="onModify && !toModify" (click)="modify()">
+          MODIFICAR
+        </button>
+        <button *ngIf="toModify" (click)="modifyOneProduct()">CAMBIAR</button>
+      </div>
     </div>
+  </div>
 
-    <div class="featureData">
-        <div class="features">
-            <h2 style="text-align: center;">CARACTERISTICAS</h2>
-            <div *ngFor="let feature of features; let indice = index" class="feature">
-                <div>
-                    <label for="name">Caracteristica</label>
-                    <input type="text" class="productInfo"  name="name" value="{{feature.name}}" id="{{feature.name}}">
-                </div>
-                <div>
-                    <label for="value">Valor</label>
-                    <input type="text" class="productInfo" name="value" value="{{feature.value}}" id="{{feature.value}}">
-                </div>
-                <div id="buttons">
-                    <button (click)="modifyFeatures(feature, indice)">Modificar</button>
-                    <button id="delete" (click)="deleteFeature(feature.id, indice)">Eliminar</button>
-                </div>
-            </div>
-            <div class="feature">
-                <div>
-                    <label for="name">Caracteristica</label>
-                    <input type="text" name="name" id="featureInp">
-                </div>
-                <div>
-                    <label for="value">Valor</label>
-                    <input type="text" name="value" id="featureValueInp">
-                </div>
-                <button (click)="addFeature()">Agregar</button>
-            </div>
+  <div class="featureData">
+    <div class="features">
+      <h2 style="text-align: center">CARACTERISTICAS</h2>
+      <div *ngFor="let feature of features; let indice = index" class="feature">
+        <div>
+          <label for="name">Caracteristica</label>
+          <input
+            type="text"
+            class="productInfo"
+            name="name"
+            value="{{ feature.name }}"
+            id="{{ feature.name }}"
+          />
         </div>
-    </div>
-
-    <div class="optionData">
-        <div class="options">
-            <h2 style="text-align: center;">OPCIONES</h2>
-            <div id="containerSelect">
-                <label for="select" id="labSelect">Seleccione la opción a modificar</label>
-                <div class="form">
-                    <div>
-                        <label for="optionSearch" class="option-title">MEDIDA </label>
-                        <input id="optionSearchInp" type="text" [(ngModel)]="optionTerm" (input)="updateSearchResults()" placeholder="Busque la medida que desea">
-                    </div>
-                    <div id="optionContainer">
-                      <div class="optionsForSearch" *ngFor="let option of optionsSearched" (click)="selectOption(option.name)">
-                        <p>{{option.name.toUpperCase()}}</p>
-                      </div>
-                    </div>
-                </div>
-                <select name="" id="" [(ngModel)]="optionTerm" (change)="selectOption(optionTerm)">
-                    <option *ngFor="let option of options" value="{{option.name}}">{{option.name}}</option>
-                </select>
-            </div>
-            <div class="option">
-                <div>
-                    <label for="name">Opción</label>
-                    <input type="text"  name="name" value="{{optionSelected.name}}" id="{{optionSelected.id}}">
-                </div>
-                <div class="priceList">
-                    <label for="modifyPrice1">Costo de producto</label>
-                    <input type="number" name="modifyPrice1" [value]="productList.costPrice" id="modifyCostPriceInp">
-                </div>
-                <div class="priceList">
-                    <label for="modifyPrice1">Stock</label>
-                    <input type="number" name="stockInpName" [value]="optionSelected.stock" id="modifyStockInp">
-                </div>
-                <div class="priceList">
-                    <label for="modifyID">ID</label>
-                    <input type="text" name="idInpName" [value]="optionSelected.id" id="modifyIdInp">
-                </div>
-                <div id="buttons">
-                    <button (click)="modifyOptions(optionSelected, 1)">Modificar</button>
-                    <button id="delete" (click)="deleteOption(optionSelected)">Eliminar</button>
-                </div>
-            </div>
-            
-            <label for="addOption">Agregue una nueva opción</label>
-
-            <div class="option">
-                <div id="optionInputs">
-                    <label for="optionName">Opción</label>
-                    <input type="text" name="optionName" id="optionInp">
-                </div>
-                <div class="priceList">
-                    <label for="price1">Costo de producto</label>
-                    <input type="number" name="price1" id="costPriceInp">
-                </div>
-                <div class="priceList">
-                    <label for="stock1">Stock</label>
-                    <input type="number" name="price1" id="stockInp">
-                </div>
-                <button (click)="addOption()">Agregar</button>
-            </div>
+        <div>
+          <label for="value">Valor</label>
+          <input
+            type="text"
+            class="productInfo"
+            name="value"
+            value="{{ feature.value }}"
+            id="{{ feature.value }}"
+          />
         </div>
-    </div>
-
-    <div class="priceData" *ngIf="onModify">
-        <div class="pricesChange">
-            <h2 style="text-align: center;">PRECIOS</h2>
-            <div class="pricesData">
-                <div id="form">
-                    <label for="percentage">Ingrese el porcentaje de cambio (0.05, 0.1, etc.)</label>
-                    <br>
-                    <input type="number" name="percentage" id="percentageInp">
-                </div>
-
-                <div id="buttons">
-                    <button id="increase" class="changePrice" (click)="changePrices('increase')">Aumentar Precios</button>
-                    <button id="decrease" class="changePrice" (click)="changePrices('decrease')">Disminuir Precios</button>
-                </div>
-            </div>
+        <div id="buttons">
+          <button (click)="modifyFeatures(feature, indice)">Modificar</button>
+          <button id="delete" (click)="deleteFeature(feature.id, indice)">
+            Eliminar
+          </button>
         </div>
+      </div>
+      <div class="feature">
+        <div>
+          <label for="name">Caracteristica</label>
+          <input type="text" name="name" id="featureInp" />
+        </div>
+        <div>
+          <label for="value">Valor</label>
+          <input type="text" name="value" id="featureValueInp" />
+        </div>
+        <button (click)="addFeature()">Agregar</button>
+      </div>
     </div>
-    
+  </div>
+
+  <div class="optionData">
+    <div class="options">
+      <h2 style="text-align: center">OPCIONES</h2>
+      <div id="containerSelect">
+        <label for="select" id="labSelect"
+          >Seleccione la opción a modificar</label
+        >
+        <div class="form">
+          <div>
+            <label for="optionSearch" class="option-title">MEDIDA </label>
+            <input
+              id="optionSearchInp"
+              type="text"
+              [(ngModel)]="optionTerm"
+              (input)="updateSearchResults()"
+              placeholder="Busque la medida que desea"
+            />
+          </div>
+          <div id="optionContainer">
+            <div
+              class="optionsForSearch"
+              *ngFor="let option of optionsSearched"
+              (click)="selectOption(option.name)"
+            >
+              <p>{{ option.name.toUpperCase() }}</p>
+            </div>
+          </div>
+        </div>
+        <select
+          name=""
+          id=""
+          [(ngModel)]="optionTerm"
+          (change)="selectOption(optionTerm)"
+        >
+          <option *ngFor="let option of options" value="{{ option.name }}">
+            {{ option.name }}
+          </option>
+        </select>
+      </div>
+      <div class="option">
+        <div>
+          <label for="name">Opción</label>
+          <input
+            type="text"
+            name="name"
+            value="{{ optionSelected.name }}"
+            id="{{ optionSelected.id }}"
+          />
+        </div>
+        <div class="priceList">
+          <label for="modifyPrice1">Costo de producto</label>
+          <input
+            type="number"
+            name="modifyPrice1"
+            [value]="productList.costPrice"
+            id="modifyCostPriceInp"
+          />
+        </div>
+        <div class="priceList">
+          <label for="modifyPrice1">Stock</label>
+          <input
+            type="number"
+            name="stockInpName"
+            [value]="optionSelected.stock"
+            id="modifyStockInp"
+          />
+        </div>
+        <div class="priceList">
+          <label for="modifyID">ID</label>
+          <input
+            type="text"
+            name="idInpName"
+            [value]="optionSelected.id"
+            id="modifyIdInp"
+          />
+        </div>
+        <div id="buttons">
+          <button (click)="modifyOptions(optionSelected, 1)">Modificar</button>
+          <button id="delete" (click)="deleteOption(optionSelected)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <label for="addOption">Agregue una nueva opción</label>
+
+      <div class="option">
+        <div id="optionInputs">
+          <label for="optionName">Opción</label>
+          <input type="text" name="optionName" id="optionInp" />
+        </div>
+        <div class="priceList">
+          <label for="price1">Costo de producto</label>
+          <input type="number" name="price1" id="costPriceInp" />
+        </div>
+        <div class="priceList">
+          <label for="stock1">Stock</label>
+          <input type="number" name="price1" id="stockInp" />
+        </div>
+        <button (click)="addOption()">Agregar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="priceData" *ngIf="onModify">
+    <div class="pricesChange">
+      <h2 style="text-align: center">PRECIOS</h2>
+      <div class="pricesData">
+        <div id="form">
+          <label for="percentage"
+            >Ingrese el porcentaje de cambio (Solo numero, sin %)</label
+          >
+          <br />
+          <input type="number" name="percentage" id="percentageInp" />
+        </div>
+
+        <div id="buttons">
+          <button
+            id="increase"
+            class="changePrice"
+            (click)="changePrices('increase')"
+          >
+            Aumentar Precios
+          </button>
+          <button
+            id="decrease"
+            class="changePrice"
+            (click)="changePrices('decrease')"
+          >
+            Disminuir Precios
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>

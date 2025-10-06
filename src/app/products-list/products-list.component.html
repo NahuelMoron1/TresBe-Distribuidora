@@ -1,51 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../../assets/3b.ico">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../../assets/3b.ico" />
     <title>Productos | Tresbe Distribuidora</title>
-</head>
-<body>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato"
+      rel="stylesheet"
+      type="text/css"
+    />
     <app-nav-bar></app-nav-bar>
     <app-poster-info></app-poster-info>
-    <app-no-products *ngIf="!loading && productsArray.length == 0"></app-no-products>
+    <app-no-products
+      *ngIf="!loading && productsArray.length == 0"
+    ></app-no-products>
     <app-loading *ngIf="loading"></app-loading>
     <div id="container" *ngIf="!loading">
-        <!--<img src="../../" alt="">!-->
-        <div id="product_item" routerLink="/products/{{product.id}}"  *ngFor="let product of productsArray">
-            <img src="{{product.image}}" alt="">
-            <div id="dataContainer">
-                <h2>{{product.name}}</h2>
-                <p id="categoryP">{{product.category}}</p>
-            <div id="prices">
-                <p id="price" [ngClass]="{'priceTacched': product.discount > 0}">${{formatNumber(product.price)}}</p>
-                <p id="discounted" *ngIf="product.discount != 0">${{formatNumber(product.priceDiscount)}}</p>
-            </div>
-            </div>
-            <div id="containerButtons">
-                <button routerLink="/products/{{product.id}}" class="buttonProducts fa fa-credit-card" *ngIf="!isAdmin()"> <span style="font-family: Arial, Helvetica, sans-serif; margin-left: 0.5vh;">COMPRAR</span></button>
-                <button (click)="goToModify()" class="buttonProducts fa fa-pencil-square-o" *ngIf="isAdmin()"> <span style="font-family: Arial, Helvetica, sans-serif; margin-left: 0.5vh;">MODIFICAR</span></button>
-                <button routerLink="/products/{{product.id}}" id="watch" class="buttonProducts fa fa-eye" *ngIf="!isAdmin()"> <span style="font-family: Arial, Helvetica, sans-serif; margin-left: 0.5vh;">VER</span></button>
-                <button routerLink="/products" id="delete" class="buttonProducts fa fa-eye" (click)="deleteProduct(product.id)" *ngIf="isAdmin()"> <span style="font-family: Arial, Helvetica, sans-serif; margin-left: 0.5vh;">ELIMINAR</span></button>
-            </div>
-        </div>
-        <div id="addProduct" class="admin" *ngIf="isAdmin() && !loading" [routerLink]="['/add/product']">
-            <p class="fa fa-plus-circle"></p>
-        </div>
-        <div id="setDiscounts" class="admin" *ngIf="isAdmin() && !loading" [routerLink]="['/products/set/discounts']">
-            <p><i class="fa fa-angle-double-down fa-5x" aria-hidden="true"></i>
+      <!--<img src="../../" alt="">!-->
+      <div
+        id="product_item"
+        routerLink="/products/{{ product.id }}"
+        *ngFor="let product of productsArray"
+      >
+        <img src="{{ product.image }}" alt="" />
+        <div id="dataContainer">
+          <h2>{{ product.name }}</h2>
+          <p id="categoryP">{{ product.category }}</p>
+          <div id="prices">
+            <p id="price" [ngClass]="{ priceTacched: product.discount > 0 }">
+              {{ product.price | currency : "" : "symbol" : "1.2-2" }}
             </p>
-            <p>Agregar Descuentos</p>
+            <p id="discounted" *ngIf="product.discount != 0">
+              ${{ formatNumber(product.priceDiscount) }}
+            </p>
+          </div>
         </div>
+        <div id="containerButtons">
+          <button
+            routerLink="/products/{{ product.id }}"
+            class="buttonProducts fa fa-credit-card"
+            *ngIf="!isAdmin()"
+          >
+            <span
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                margin-left: 0.5vh;
+              "
+              >COMPRAR</span
+            >
+          </button>
+          <button
+            (click)="goToModify(product.id)"
+            class="buttonProducts fa fa-pencil-square-o"
+            *ngIf="isAdmin()"
+          >
+            <span
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                margin-left: 0.5vh;
+              "
+              >MODIFICAR</span
+            >
+          </button>
+          <button
+            routerLink="/products/{{ product.id }}"
+            id="watch"
+            class="buttonProducts fa fa-eye"
+            *ngIf="!isAdmin()"
+          >
+            <span
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                margin-left: 0.5vh;
+              "
+              >VER</span
+            >
+          </button>
+          <button
+            routerLink="/products"
+            id="delete"
+            class="buttonProducts fa fa-eye"
+            (click)="deleteProduct(product.id)"
+            *ngIf="isAdmin()"
+          >
+            <span
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                margin-left: 0.5vh;
+              "
+              >ELIMINAR</span
+            >
+          </button>
+        </div>
+      </div>
+      <div
+        id="addProduct"
+        class="admin"
+        *ngIf="isAdmin() && !loading"
+        [routerLink]="['/add/product']"
+      >
+        <p class="fa fa-plus-circle"></p>
+      </div>
+      <div
+        id="setDiscounts"
+        class="admin"
+        *ngIf="isAdmin() && !loading"
+        [routerLink]="['/products/set/discounts']"
+      >
+        <p><i class="fa fa-angle-double-down fa-5x" aria-hidden="true"></i></p>
+        <p>Agregar Descuentos</p>
+      </div>
     </div>
     <div class="pagination-controls" *ngIf="productsArray.length > 0">
-        <button (click)="previousPage()" class="pagButton" [disabled]="currentPage === 1" style="background-color: #4d7e98;">Anterior</button>
-        <p style="text-align: center; font-family: Arial, Helvetica, sans-serif;" *ngIf="productsArray.length > 0">{{currentPage}} - {{totalPages}}</p>
-        <button (click)="nextPage()" class="pagButton" [disabled]="currentPage == totalPages" style="background-color: #a4bb43;">Siguiente</button>
+      <button
+        (click)="previousPage()"
+        class="pagButton"
+        [disabled]="currentPage === 1"
+        style="background-color: #4d7e98"
+      >
+        Anterior
+      </button>
+      <p
+        style="text-align: center; font-family: Arial, Helvetica, sans-serif"
+        *ngIf="productsArray.length > 0"
+      >
+        {{ currentPage }} - {{ totalPages }}
+      </p>
+      <button
+        (click)="nextPage()"
+        class="pagButton"
+        [disabled]="currentPage == totalPages"
+        style="background-color: #a4bb43"
+      >
+        Siguiente
+      </button>
     </div>
     <app-footer></app-footer>
-</body>
+  </body>
 </html>

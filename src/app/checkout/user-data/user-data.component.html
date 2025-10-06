@@ -18,21 +18,21 @@
                   </div>
                 </td>
 
-                <td id="price">ARS ${{ product.price * product.quantity }}</td>
+                <td id="price">{{(product.price * product.quantity) | currency:'ARS $':'symbol':'1.2-2'}}</td>
               </tr>
 
               <tr>
                 <td>
                     <p>SUBTOTAL</p>
                 </td>
-                <td>ARS ${{subtotal}}</td>
+                <td>{{subtotal | currency:'ARS $':'symbol':'1.2-2'}}</td>
               </tr>
 
               <tr>
                 <td>
                     <p>TOTAL</p>
                 </td>
-                <td>ARS ${{total}}</td>
+                <td>{{total | currency:'ARS $':'symbol':'1.2-2'}}</td>
               </tr>
               <p>Los precios no contienen IVA aplicado</p>
             </tbody>
