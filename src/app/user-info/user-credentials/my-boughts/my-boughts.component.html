@@ -1,20 +1,29 @@
-<main class="profile" *ngIf="selectedOrder.code != ''">
-  <p *ngIf="isAdmin()">Estas viendo una orden del usuario: {{selectedOrder.username}}</p>
+@if (selectedOrder.code != '') {
+  <main class="profile">
+    @if (isAdmin()) {
+      <p>Estas viendo una orden del usuario: {{selectedOrder.username}}</p>
+    }
     <section class="profile-header">
       <div class="profile-info">
         <h1>#{{selectedOrder.code}}</h1>
         <p>{{getDates(selectedOrder.orderDate)}}</p>
         <p>$ {{formatNumber(selectedOrder.total)}}</p>
-        <p *ngIf="!(selectedOrder.payed) && !(user.client) && !isAdmin()">Transferencia pendiente</p>
-        <p *ngIf="selectedOrder.description != ''">{{selectedOrder.description}}</p>
+        @if (!(selectedOrder.payed) && !(user.client) && !isAdmin()) {
+          <p>Transferencia pendiente</p>
+        }
+        @if (selectedOrder.description != '') {
+          <p>{{selectedOrder.description}}</p>
+        }
       </div>
     </section>
     <section class="personal-info">
       <h2>Información de la orden</h2>
-      <div class="info-row" *ngFor="let product of selectedProducts">
-        <span>{{product.name}} {{product.optionSelected}}</span>
-        <span>x{{product.quantity}}</span>
-      </div>
+      @for (product of selectedProducts; track product) {
+        <div class="info-row">
+          <span>{{product.name}} {{product.optionSelected}}</span>
+          <span>x{{product.quantity}}</span>
+        </div>
+      }
     </section>
     <section class="address-info">
       <h2>Dirección de envio</h2>
@@ -36,35 +45,58 @@
       </div>
       <div class="info-row">
         <span>Orden Registrada</span>
-        <span *ngIf="selectedOrder.attended">Si</span>
-        <span *ngIf="!selectedOrder.attended">No</span>
+        @if (selectedOrder.attended) {
+          <span>Si</span>
+        }
+        @if (!selectedOrder.attended) {
+          <span>No</span>
+        }
       </div>
       <div class="info-row">
         <span>Orden Pagada</span>
-        <span *ngIf="selectedOrder.payed">Si</span>
-        <span *ngIf="!selectedOrder.payed">No</span>
+        @if (selectedOrder.payed) {
+          <span>Si</span>
+        }
+        @if (!selectedOrder.payed) {
+          <span>No</span>
+        }
       </div>
     </section>
-
     <div id="buttonsUser">
-      <button style="cursor: auto;" *ngIf="!isAdmin() && selectedOrder.attended">Tu orden ya fue registrada!</button>
-      <button id="deleteButton" *ngIf="isAdmin()" (click)="deleteUserOrder(selectedOrder.code)">Eliminar</button>
-      <button *ngIf="isAdmin() && !selectedOrder.attended" (click)="confirmAttend('attend')" id="registerOrder">Orden Registrada</button>
-      <button id="noRegisterButton" *ngIf="isAdmin() && selectedOrder.attended" (click)="confirmAttend('unattend')">No está registrada</button>
-      <button id="payedButton" *ngIf="isAdmin() && selectedOrder.attended && !selectedOrder.payed" (click)="confirmPayment('payed')">Orden Pagada</button>
-      <button id="notPayedButton" *ngIf="isAdmin() && selectedOrder.attended && selectedOrder.payed" (click)="confirmPayment('notPayed')">No está pagada</button>
-      <button id="mofifyButton" *ngIf="isAdmin()" routerLink="/modify/order/{{selectedOrder.id}}">Modificar</button>
+      @if (!isAdmin() && selectedOrder.attended) {
+        <button style="cursor: auto;">Tu orden ya fue registrada!</button>
+      }
+      @if (isAdmin()) {
+        <button id="deleteButton" (click)="deleteUserOrder(selectedOrder.code)">Eliminar</button>
+      }
+      @if (isAdmin() && !selectedOrder.attended) {
+        <button (click)="confirmAttend('attend')" id="registerOrder">Orden Registrada</button>
+      }
+      @if (isAdmin() && selectedOrder.attended) {
+        <button id="noRegisterButton" (click)="confirmAttend('unattend')">No está registrada</button>
+      }
+      @if (isAdmin() && selectedOrder.attended && !selectedOrder.payed) {
+        <button id="payedButton" (click)="confirmPayment('payed')">Orden Pagada</button>
+      }
+      @if (isAdmin() && selectedOrder.attended && selectedOrder.payed) {
+        <button id="notPayedButton" (click)="confirmPayment('notPayed')">No está pagada</button>
+      }
+      @if (isAdmin()) {
+        <button id="mofifyButton" routerLink="/modify/order/{{selectedOrder.id}}">Modificar</button>
+      }
       <!--<button *ngIf="!(user.client) && !(selectedOrder.payed) && !isAdmin()">Ya hice la transferencia</button>!-->
     </div>
   </main>
-  <div id="containerNoOrders" *ngIf="selectedOrder.code == ''">
+}
+@if (selectedOrder.code == '') {
+  <div id="containerNoOrders">
     <div id="noOrders">
       <i class="fa fa-exclamation-circle fa-5x" aria-hidden="true"></i>
       <p>En este apartado vas a encontrar el detalle de la orden que selecciones</p>
-
       <div id="select">
-        <p>Seleccioná una orden </p> 
+        <p>Seleccioná una orden </p>
         <i class="fa fa-arrow-circle-right fa-3x" aria-hidden="true"></i>
       </div>
     </div>
   </div>
+}

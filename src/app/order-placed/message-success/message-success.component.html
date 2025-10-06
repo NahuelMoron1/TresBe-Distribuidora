@@ -1,20 +1,22 @@
 <div id="container">
-    <i id="check" class="fa fa-check-circle fa-5x" aria-hidden="true"></i>
+  <i id="check" class="fa fa-check-circle fa-5x" aria-hidden="true"></i>
 
-    <h1>RESERVASTE TU ORDEN</h1>
-    <p id="mailSent">Te enviamos un mail con la confirmación de la reserva a {{user.email}}</p>
+  <h1>RESERVASTE TU ORDEN</h1>
+  <p id="mailSent">Te enviamos un mail con la confirmación de la reserva a {{user.email}}</p>
 
-    <p>Te vamos a notificar por email cuando estemos preparando tu pedido</p>
+  <p>Te vamos a notificar por email cuando estemos preparando tu pedido</p>
 
-    <div id="bankData">
-        <p>TRESBE DISTRIBUIDORA</p>
-        <p>TELÉFONO +54 9 223 562-4704</p>
-        <p>ESTEBAN NICOLAS BAZZIANO</p>
-        <p>DNI: 29758216</p>
-    </div>
+  <div id="bankData">
+    <p>TRESBE DISTRIBUIDORA</p>
+    <p>TELÉFONO +54 9 223 562-4704</p>
+    <p>ESTEBAN NICOLAS BAZZIANO</p>
+    <p>DNI: 29758216</p>
+  </div>
 
-    <p>Mientras preparamos tu pedido, ponete en contacto con nosotros para coordinar el pago de la orden</p>
-    <p>Muchas gracias por comprar en Tresbe Distribuidora</p>
+  <p>Mientras preparamos tu pedido, ponete en contacto con nosotros para coordinar el pago de la orden</p>
+  <p>Muchas gracias por comprar en Tresbe Distribuidora</p>
 
-    <app-order-progress *ngIf="!(user.client)"></app-order-progress>
+  @if (!(user.client)) {
+    <app-order-progress></app-order-progress>
+  }
 </div>
