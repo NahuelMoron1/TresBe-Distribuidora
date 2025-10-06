@@ -1,9 +1,15 @@
 <div id="containsAll">
-    <h2>BUSCÁ POR MARCAS</h2>
-    <div id="container">
-        <div class="brands" (click)="onSelectBrand('all')" [ngClass]="{'selected-brand': allBrandsSelected()}">TODOS</div>
-        <div class="brands" *ngFor="let brand of brandsArray" (click)="onSelectBrand(brand.name)" [ngClass]="{'selected-brand': selected(brand.name)}">{{brand.name.toUpperCase()}}</div>
-        <div class="brands" *ngIf="isAdmin()" [routerLink]="['/products/set/discounts']">DESCUENTOS</div>
-        <div class="brands" *ngIf="isAdmin()" [routerLink]="['/products/modify/prices']">PRECIOS</div>
-    </div>
+  <h2>BUSCÁ POR MARCAS</h2>
+  <div id="container">
+    <div class="brands" (click)="onSelectBrand('all')" [ngClass]="{'selected-brand': allBrandsSelected()}">TODOS</div>
+    @for (brand of brandsArray; track brand) {
+      <div class="brands" (click)="onSelectBrand(brand.name)" [ngClass]="{'selected-brand': selected(brand.name)}">{{brand.name.toUpperCase()}}</div>
+    }
+    @if (isAdmin()) {
+      <div class="brands" [routerLink]="['/products/set/discounts']">DESCUENTOS</div>
+    }
+    @if (isAdmin()) {
+      <div class="brands" [routerLink]="['/products/modify/prices']">PRECIOS</div>
+    }
+  </div>
 </div>

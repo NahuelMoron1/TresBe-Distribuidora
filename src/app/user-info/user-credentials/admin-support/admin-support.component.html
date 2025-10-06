@@ -1,16 +1,20 @@
 <div id="container">
-    <div id="searchbar">
-        <p>Buscar usuario por ID</p>
-        <br>
-        <input type="text" name="user" id="userInp" (input)="searchUserInput()" [(ngModel)]="searchTerm">
-        <button>Buscar Usuario</button>
+  <div id="searchbar">
+    <p>Buscar usuario por ID</p>
+    <br>
+      <input type="text" name="user" id="userInp" (input)="searchUserInput()" [(ngModel)]="searchTerm">
+      <button>Buscar Usuario</button>
     </div>
 
-    <div id="users" *ngIf="users.length > 0">
-        <div *ngFor="let userAux1 of users">
+    @if (users.length > 0) {
+      <div id="users">
+        @for (userAux1 of users; track userAux1) {
+          <div>
             <p (click)="searchUserClick(userAux1.username)">{{userAux1.username}}</p>
-        </div>
-    </div>
+          </div>
+        }
+      </div>
+    }
 
     <app-user-account></app-user-account>
-</div>
+  </div>

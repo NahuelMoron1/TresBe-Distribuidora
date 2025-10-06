@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito | Tresbe Distribuidora</title>
-</head>
-<body>
+  </head>
+  <body>
     <app-nav-bar></app-nav-bar>
     <h1 id="cart">CARRITO DE COMPRAS</h1>
-    <app-cart-list *ngIf="cartProducts.length > 0"></app-cart-list>
-    <app-no-cart *ngIf="cartProducts.length == 0"></app-no-cart>
+    @if (cartProducts.length > 0) {
+      <app-cart-list></app-cart-list>
+    }
+    @if (cartProducts.length == 0) {
+      <app-no-cart></app-no-cart>
+    }
     <app-footer></app-footer>
-</body>
+  </body>
 </html>

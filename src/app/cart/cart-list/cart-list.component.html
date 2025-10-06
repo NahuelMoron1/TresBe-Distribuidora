@@ -9,23 +9,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products; let indice = index;">
-        <td>
-          <img [src]="product.image" [alt]="product.description" draggable="false">
-          <div class="product-info">
-            <p id="productName">{{ product.name }} {{ product.optionSelected }}</p>
-            <p id="productCategory">Categoria: {{ product.category }}</p>
-          </div>
-        </td>
-        <td >
-          <button class="quantity-btn" (click)="incrementQuantity(product, indice)">+</button>
-          <input type="number" name="quantity" class="quantityInp" id="{{product.id}}" (input)="changeQuantity(product)" [disabled]="true" value="{{product.quantity}}">
-          <button class="quantity-btn" id="decrement" (click)="decrementQuantity(product, indice)">-</button>
-        </td>
-        <td><button class="remove-btn" (click)="deleteProduct(indice)">x</button></td>
-        <td id="price" *ngIf="product.discount == 0">{{ product.price | currency:'':'symbol':'1.2-2' }}</td>
-        <td id="priceDiscount" *ngIf="product.discount > 0">$ {{ product.priceDiscount | currency:'':'symbol':'1.2-2'}}</td>
-      </tr>
+      @for (product of products; track product; let indice = $index) {
+        <tr>
+          <td>
+            <img [src]="product.image" [alt]="product.description" draggable="false">
+            <div class="product-info">
+              <p id="productName">{{ product.name }} {{ product.optionSelected }}</p>
+              <p id="productCategory">Categoria: {{ product.category }}</p>
+            </div>
+          </td>
+          <td >
+            <button class="quantity-btn" (click)="incrementQuantity(product, indice)">+</button>
+            <input type="number" name="quantity" class="quantityInp" id="{{product.id}}" (input)="changeQuantity(product)" [disabled]="true" value="{{product.quantity}}">
+            <button class="quantity-btn" id="decrement" (click)="decrementQuantity(product, indice)">-</button>
+          </td>
+          <td><button class="remove-btn" (click)="deleteProduct(indice)">x</button></td>
+          @if (product.discount == 0) {
+            <td id="price">{{ product.price | currency:'':'symbol':'1.2-2' }}</td>
+          }
+          @if (product.discount > 0) {
+            <td id="priceDiscount">$ {{ product.priceDiscount | currency:'':'symbol':'1.2-2'}}</td>
+          }
+        </tr>
+      }
     </tbody>
   </table>
 

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <div id="containsAll">
-        <h1>NUESTROS PRODUCTOS</h1>
-    <div id="container">
-        <div class="product-item" *ngFor="let product of productsArray" routerLink="/products/{{product.id}}">
+      <h1>NUESTROS PRODUCTOS</h1>
+      <div id="container">
+        @for (product of productsArray; track product) {
+          <div class="product-item" routerLink="/products/{{product.id}}">
             <img src="{{product.image}}" alt="{{product.name}}">
             <h2>{{product.name}}</h2>
             <p>{{product.brand}}</p>
             <p>{{product.category}}</p>
-        </div>
+          </div>
+        }
+      </div>
+      <div id="buttonProducts" [routerLink]="['/products']">Conocé nuestros productos</div>
     </div>
-    <div id="buttonProducts" [routerLink]="['/products']">Conocé nuestros productos</div>
-    </div>
-</body>
+  </body>
 </html>

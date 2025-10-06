@@ -1,66 +1,90 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{productSelected.name}} | Tresbe Distribuidora</title>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{productSelected.name}} | Tresbe Distribuidora</title>
+  </head>
 
-<body>
-  <app-nav-bar></app-nav-bar>
-  <div id="container">
-    <div class="imageDiv">
-      <img src="{{productSelected.image}}" alt="{{productSelected.name}}">
-    </div>
-    <div class="product-page">
-      <div class="product-title">{{productSelected.name}}</div>
-      <div class="product-code">Categoría: {{productSelected.category}}</div>
-      <div class="price" [ngClass]="{'tacched': productSelected.discount > 0}">{{productSelected.price | currency:'':'symbol':'1.2-2'}}
+  <body>
+    <app-nav-bar></app-nav-bar>
+    <div id="container">
+      <div class="imageDiv">
+        <img src="{{productSelected.image}}" alt="{{productSelected.name}}">
       </div>
-      <div class="price" *ngIf="productSelected.discount > 0">${{productSelected.priceDiscount.toFixed(1)}}</div>
-      <div class="add-to-bag" (click)="addToCart()" *ngIf="!onCart">Añadir al carrito</div>
-      <div class="add-to-bag" [routerLink]="['/cart']" *ngIf="onCart">En carrito</div>
-      <div class="form" id="formMeasure">
-        <label for="optionSearch" class="option-title">MEDIDA </label>
-        <input id="optionSearchInp" type="text" [(ngModel)]="searchTerm" (input)="updateSearchResults()"
-          placeholder="Busque la medida que desea">
-        <div id="optionContainer">
-          <div class="optionData" *ngFor="let option of optionsSearched" (click)="selectOption(option)">
-            <p>{{option.name.toUpperCase()}}</p>
+      <div class="product-page">
+        <div class="product-title">{{productSelected.name}}</div>
+        <div class="product-code">Categoría: {{productSelected.category}}</div>
+        <div class="price" [ngClass]="{'tacched': productSelected.discount > 0}">{{productSelected.price | currency:'':'symbol':'1.2-2'}}
+        </div>
+        @if (productSelected.discount > 0) {
+          <div class="price">${{productSelected.priceDiscount.toFixed(1)}}</div>
+        }
+        @if (!onCart) {
+          <div class="add-to-bag" (click)="addToCart()">Añadir al carrito</div>
+        }
+        @if (onCart) {
+          <div class="add-to-bag" [routerLink]="['/cart']">En carrito</div>
+        }
+        <div class="form" id="formMeasure">
+          <label for="optionSearch" class="option-title">MEDIDA </label>
+          <input id="optionSearchInp" type="text" [(ngModel)]="searchTerm" (input)="updateSearchResults()"
+            placeholder="Busque la medida que desea">
+          <div id="optionContainer">
+            @for (option of optionsSearched; track option) {
+              <div class="optionData" (click)="selectOption(option)">
+                <p>{{option.name.toUpperCase()}}</p>
+              </div>
+            }
           </div>
         </div>
-      </div>
-      <div class="product-options">
-        <select *ngIf="options.length > 0" [(ngModel)]="optionSelected.id" name="options" (change)="isOnCart()"
-          id="prodOptions">
-          <option *ngFor="let option of options" value="{{option.id}}">{{option.name}}</option>
-        </select>
-      </div>
-      <div class="form" style="display: flex; flex-direction: column;" *ngIf="admin">
-        <label for="priceList" class="option-title">LISTA DE PRECIOS </label>
-        <select *ngIf="admin" [(ngModel)]="priceList" name="pricesList" (change)="updatePriceList(priceList)"
-          id="priceOptions">
-          <option *ngFor="let priceList of prices" value="{{priceList}}">{{priceList}}</option>
-        </select>
-      </div>
-      <div class="product-options">
-        <div class="option-title" *ngIf="productSelected.description != ''">DESCRIPCIÓN</div>
-        <div id="description">{{productSelected.description}}</div>
-      </div>
-      <div class="product-options">
-        <div class="option-title" *ngIf="productSelected.features != undefined && productSelected.features.length > 0">CARACTERISTICAS</div>
-        <div class="size-options">
-          <div *ngFor="let feature of productSelected.features">
-            <p>{{feature.name}}</p>
-            <p>{{feature.value}}</p>
+        <div class="product-options">
+          @if (options.length > 0) {
+            <select [(ngModel)]="optionSelected.id" name="options" (change)="isOnCart()"
+              id="prodOptions">
+              @for (option of options; track option) {
+                <option value="{{option.id}}">{{option.name}}</option>
+              }
+            </select>
+          }
+        </div>
+        @if (admin) {
+          <div class="form" style="display: flex; flex-direction: column;">
+            <label for="priceList" class="option-title">LISTA DE PRECIOS </label>
+            @if (admin) {
+              <select [(ngModel)]="priceList" name="pricesList" (change)="updatePriceList(priceList)"
+                id="priceOptions">
+                @for (priceList of prices; track priceList) {
+                  <option value="{{priceList}}">{{priceList}}</option>
+                }
+              </select>
+            }
+          </div>
+        }
+        <div class="product-options">
+          @if (productSelected.description != '') {
+            <div class="option-title">DESCRIPCIÓN</div>
+          }
+          <div id="description">{{productSelected.description}}</div>
+        </div>
+        <div class="product-options">
+          @if (productSelected.features != undefined && productSelected.features.length > 0) {
+            <div class="option-title">CARACTERISTICAS</div>
+          }
+          <div class="size-options">
+            @for (feature of productSelected.features; track feature) {
+              <div>
+                <p>{{feature.name}}</p>
+                <p>{{feature.value}}</p>
+              </div>
+            }
           </div>
         </div>
+        <div class="delivery-info">Envíos gratis a Mar Del Plata</div>
       </div>
-      <div class="delivery-info">Envíos gratis a Mar Del Plata</div>
     </div>
-  </div>
-  <app-footer></app-footer>
-</body>
+    <app-footer></app-footer>
+  </body>
 
 </html>
