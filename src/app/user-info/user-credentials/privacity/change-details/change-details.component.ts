@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-change-details',
-  templateUrl: './change-details.component.html',
-  styleUrls: ['./change-details.component.css']
+    selector: 'app-change-details',
+    templateUrl: './change-details.component.html',
+    styleUrls: ['./change-details.component.css'],
+    standalone: false
 })
 export class ChangeDetailsComponent {
 

@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-swal-confirm',
-  templateUrl: './swal-confirm.component.html',
-  styleUrls: ['./swal-confirm.component.css']
+    selector: 'app-swal-confirm',
+    templateUrl: './swal-confirm.component.html',
+    styleUrls: ['./swal-confirm.component.css'],
+    standalone: false
 })
 export class SwalConfirmComponent {
   static confirmPetition(){

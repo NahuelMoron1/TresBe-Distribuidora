@@ -15,9 +15,10 @@ import { PricesService } from 'src/app/services/prices.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-  selector: 'app-product-data',
-  templateUrl: './product-data.component.html',
-  styleUrls: ['./product-data.component.css'],
+    selector: 'app-product-data',
+    templateUrl: './product-data.component.html',
+    styleUrls: ['./product-data.component.css'],
+    standalone: false
 })
 export class ProductDataComponent implements OnInit {
   productService = inject(ProductService);

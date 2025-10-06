@@ -12,9 +12,10 @@ import { ProductService } from 'src/app/services/product.service';
 import { ProgressService } from 'src/app/services/progress.service';
 
 @Component({
-  selector: 'app-data-prices',
-  templateUrl: './data-prices.component.html',
-  styleUrls: ['./data-prices.component.css'],
+    selector: 'app-data-prices',
+    templateUrl: './data-prices.component.html',
+    styleUrls: ['./data-prices.component.css'],
+    standalone: false
 })
 export class DataPricesComponent implements OnInit {
   brandService = inject(BrandsService);

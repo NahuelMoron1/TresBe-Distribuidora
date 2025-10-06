@@ -8,9 +8,10 @@ import { UserDisplayService } from 'src/app/services/user-display.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-user-account',
-  templateUrl: './user-account.component.html',
-  styleUrls: ['./user-account.component.css']
+    selector: 'app-user-account',
+    templateUrl: './user-account.component.html',
+    styleUrls: ['./user-account.component.css'],
+    standalone: false
 })
 export class UserAccountComponent implements OnInit{
   displayService = inject(UserDisplayService);

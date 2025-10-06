@@ -11,9 +11,10 @@ import { PublicUser } from '../models/PublicUser';
 import { CookieService } from '../services/cookie.service';
 
 @Component({
-  selector: 'app-products-list',
-  templateUrl: './products-list.component.html',
-  styleUrls: ['./products-list.component.css'],
+    selector: 'app-products-list',
+    templateUrl: './products-list.component.html',
+    styleUrls: ['./products-list.component.css'],
+    standalone: false
 })
 export class ProductsListComponent implements OnInit {
   productsArray: Array<Product> = [];

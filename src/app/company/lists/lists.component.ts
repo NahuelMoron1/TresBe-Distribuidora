@@ -4,9 +4,10 @@ import { User } from 'src/app/models/User';
 import { CookieService } from 'src/app/services/cookie.service';
 
 @Component({
-  selector: 'app-lists',
-  templateUrl: './lists.component.html',
-  styleUrls: ['./lists.component.css']
+    selector: 'app-lists',
+    templateUrl: './lists.component.html',
+    styleUrls: ['./lists.component.css'],
+    standalone: false
 })
 export class ListsComponent implements OnInit{
   cookieService = inject(CookieService);

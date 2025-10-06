@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Order } from '../models/Order';
 
 @Component({
-  selector: 'app-has-order',
-  templateUrl: './has-order.component.html',
-  styleUrls: ['./has-order.component.css']
+    selector: 'app-has-order',
+    templateUrl: './has-order.component.html',
+    styleUrls: ['./has-order.component.css'],
+    standalone: false
 })
 export class HasOrderComponent implements OnInit{
     ngOnInit() {

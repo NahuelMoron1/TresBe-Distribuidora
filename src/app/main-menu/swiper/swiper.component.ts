@@ -4,9 +4,10 @@ import { register } from 'swiper/element/bundle'
 // register Swiper custom elements
 register();
 @Component({
-  selector: 'app-swiper',
-  templateUrl: './swiper.component.html',
-  styleUrls: ['./swiper.component.css']
+    selector: 'app-swiper',
+    templateUrl: './swiper.component.html',
+    styleUrls: ['./swiper.component.css'],
+    standalone: false
 })
 export class SwiperComponent implements OnInit{
   arraySwiper: Array<string> = [];

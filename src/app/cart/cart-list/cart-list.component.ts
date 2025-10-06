@@ -7,9 +7,10 @@ import { OptionsService } from 'src/app/services/options.service';
 import { PricesService } from 'src/app/services/prices.service';
 
 @Component({
-  selector: 'app-cart-list',
-  templateUrl: './cart-list.component.html',
-  styleUrls: ['./cart-list.component.css']
+    selector: 'app-cart-list',
+    templateUrl: './cart-list.component.html',
+    styleUrls: ['./cart-list.component.css'],
+    standalone: false
 })
 export class CartListComponent {
   cartService = inject(CartService);

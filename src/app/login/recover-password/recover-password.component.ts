@@ -3,9 +3,10 @@ import { User } from 'src/app/models/User';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-recover-password',
-  templateUrl: './recover-password.component.html',
-  styleUrls: ['./recover-password.component.css']
+    selector: 'app-recover-password',
+    templateUrl: './recover-password.component.html',
+    styleUrls: ['./recover-password.component.css'],
+    standalone: false
 })
 export class RecoverPasswordComponent {
   userService = inject( UserService );

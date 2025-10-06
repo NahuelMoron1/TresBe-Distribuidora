@@ -2,9 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren, 
 import { Product } from 'src/app/models/Product';
 import { ProductService } from 'src/app/services/product.service';
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+    selector: 'app-products',
+    templateUrl: './products.component.html',
+    styleUrls: ['./products.component.css'],
+    standalone: false
 })
 export class ProductsComponent implements OnInit {
   productsArray: Array<Product> = [];

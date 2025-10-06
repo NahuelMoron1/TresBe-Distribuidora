@@ -13,9 +13,10 @@ import { UserdataService } from 'src/app/services/userdata.service';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 @Component({
-  selector: 'app-my-boughts',
-  templateUrl: './my-boughts.component.html',
-  styleUrls: ['./my-boughts.component.css']
+    selector: 'app-my-boughts',
+    templateUrl: './my-boughts.component.html',
+    styleUrls: ['./my-boughts.component.css'],
+    standalone: false
 })
 export class MyBoughtsComponent implements OnInit {
   ordersAndProductsService = inject(OrderXProductsXOxpService);

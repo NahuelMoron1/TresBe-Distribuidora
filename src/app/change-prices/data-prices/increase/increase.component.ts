@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-increase',
-  templateUrl: './increase.component.html',
-  styleUrls: ['./increase.component.css']
+    selector: 'app-increase',
+    templateUrl: './increase.component.html',
+    styleUrls: ['./increase.component.css'],
+    standalone: false
 })
 export class IncreaseComponent {
 

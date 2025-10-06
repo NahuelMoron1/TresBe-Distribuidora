@@ -8,9 +8,10 @@ import { UserService } from 'src/app/services/user.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-admin-support',
-  templateUrl: './admin-support.component.html',
-  styleUrls: ['./admin-support.component.css']
+    selector: 'app-admin-support',
+    templateUrl: './admin-support.component.html',
+    styleUrls: ['./admin-support.component.css'],
+    standalone: false
 })
 export class AdminSupportComponent{
   orderxproductsxoxpService = inject(OrderXProductsXOxpService);

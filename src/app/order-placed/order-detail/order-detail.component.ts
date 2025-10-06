@@ -13,9 +13,10 @@ import { ProductService } from 'src/app/services/product.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-order-detail',
-  templateUrl: './order-detail.component.html',
-  styleUrls: ['./order-detail.component.css']
+    selector: 'app-order-detail',
+    templateUrl: './order-detail.component.html',
+    styleUrls: ['./order-detail.component.css'],
+    standalone: false
 })
 export class OrderDetailComponent implements OnInit{
   productService = inject(ProductService);

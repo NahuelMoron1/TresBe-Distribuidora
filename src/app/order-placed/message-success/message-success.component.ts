@@ -4,9 +4,10 @@ import { CookieService } from 'src/app/services/cookie.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-message-success',
-  templateUrl: './message-success.component.html',
-  styleUrls: ['./message-success.component.css']
+    selector: 'app-message-success',
+    templateUrl: './message-success.component.html',
+    styleUrls: ['./message-success.component.css'],
+    standalone: false
 })
 export class MessageSuccessComponent implements OnInit{
   userService = inject(UserService);

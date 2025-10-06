@@ -12,9 +12,10 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { UserDisplayService } from 'src/app/services/user-display.service';
 
 @Component({
-  selector: 'app-orders-info-completed',
-  templateUrl: './orders-info-completed.component.html',
-  styleUrls: ['./orders-info-completed.component.css']
+    selector: 'app-orders-info-completed',
+    templateUrl: './orders-info-completed.component.html',
+    styleUrls: ['./orders-info-completed.component.css'],
+    standalone: false
 })
 export class OrdersInfoCompletedComponent {
   ordersAndProducts: OrdersAndProducts[] = [];

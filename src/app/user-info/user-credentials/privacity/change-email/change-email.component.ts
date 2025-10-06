@@ -4,9 +4,10 @@ import { User } from 'src/app/models/User';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-change-email',
-  templateUrl: './change-email.component.html',
-  styleUrls: ['./change-email.component.css']
+    selector: 'app-change-email',
+    templateUrl: './change-email.component.html',
+    styleUrls: ['./change-email.component.css'],
+    standalone: false
 })
 export class ChangeEmailComponent implements OnInit{
   userService = inject(UserService);

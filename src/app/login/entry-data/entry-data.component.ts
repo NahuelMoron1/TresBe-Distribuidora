@@ -3,9 +3,10 @@ import { User } from 'src/app/models/User';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-entry-data',
-  templateUrl: './entry-data.component.html',
-  styleUrls: ['./entry-data.component.css']
+    selector: 'app-entry-data',
+    templateUrl: './entry-data.component.html',
+    styleUrls: ['./entry-data.component.css'],
+    standalone: false
 })
 export class EntryDataComponent {
   userService = inject(UserService);

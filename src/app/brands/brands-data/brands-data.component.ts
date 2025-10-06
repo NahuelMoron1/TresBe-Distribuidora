@@ -3,9 +3,10 @@ import { Brand } from 'src/app/models/Brand';
 import { BrandsService } from 'src/app/services/brands.service';
 
 @Component({
-  selector: 'app-brands-data',
-  templateUrl: './brands-data.component.html',
-  styleUrls: ['./brands-data.component.css']
+    selector: 'app-brands-data',
+    templateUrl: './brands-data.component.html',
+    styleUrls: ['./brands-data.component.css'],
+    standalone: false
 })
 export class BrandsDataComponent implements OnInit {
   loading: boolean = false;

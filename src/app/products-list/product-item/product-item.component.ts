@@ -15,9 +15,10 @@ import { PublicUser } from 'src/app/models/PublicUser';
 import { CookieService } from 'src/app/services/cookie.service';
 
 @Component({
-  selector: 'app-product-item',
-  templateUrl: './product-item.component.html',
-  styleUrls: ['./product-item.component.css']
+    selector: 'app-product-item',
+    templateUrl: './product-item.component.html',
+    styleUrls: ['./product-item.component.css'],
+    standalone: false
 })
 export class ProductItemComponent implements OnInit {
   productService = inject(ProductService);

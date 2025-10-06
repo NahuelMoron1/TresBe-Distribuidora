@@ -11,9 +11,10 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { UserdataService } from 'src/app/services/userdata.service';
 
 @Component({
-  selector: 'app-buttons-detail',
-  templateUrl: './buttons-detail.component.html',
-  styleUrls: ['./buttons-detail.component.css']
+    selector: 'app-buttons-detail',
+    templateUrl: './buttons-detail.component.html',
+    styleUrls: ['./buttons-detail.component.css'],
+    standalone: false
 })
 export class ButtonsDetailComponent implements OnInit{
   userdataService = inject(UserdataService);

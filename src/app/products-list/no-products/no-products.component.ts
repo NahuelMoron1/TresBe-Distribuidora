@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-no-products',
-  templateUrl: './no-products.component.html',
-  styleUrls: ['./no-products.component.css']
+    selector: 'app-no-products',
+    templateUrl: './no-products.component.html',
+    styleUrls: ['./no-products.component.css'],
+    standalone: false
 })
 export class NoProductsComponent {
 
