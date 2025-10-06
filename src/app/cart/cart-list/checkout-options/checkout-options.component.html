@@ -1,18 +1,18 @@
 <div id="checkoutContainer">
     <div id="discount" class="checkout">
       <p class="nameCheckout">Descuento</p>
-      <p>${{formatNumber(discount)}}</p>
+      <p>{{discount | currency:'':'symbol':'1.2-2'}}</p>
     </div>
     <div id="delivery" class="checkout">
       <p class="nameCheckout">Envio</p>
-      <p>${{formatNumber(delivery)}}</p>
+      <p>{{delivery | currency:'':'symbol':'1.2-2'}}</p>
     </div>
     <div id="subTotal" class="checkout">
       <p class="nameCheckout">Subtotal</p>
-      <p>${{formatNumber(subtotal)}}</p>
+      <p>{{subtotal | currency:'':'symbol':'1.2-2'}}</p>
     </div>
     <div id="total" class="checkout">
       <p class="nameCheckout">Total</p>
-      <p>${{formatNumber(total)}}</p>
+      <p>{{total | currency:'':'symbol':'1.2-2'}}</p>
     </div>
   </div>

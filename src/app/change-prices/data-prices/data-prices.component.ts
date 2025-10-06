@@ -14,21 +14,21 @@ import { ProgressService } from 'src/app/services/progress.service';
 @Component({
   selector: 'app-data-prices',
   templateUrl: './data-prices.component.html',
-  styleUrls: ['./data-prices.component.css']
+  styleUrls: ['./data-prices.component.css'],
 })
-export class DataPricesComponent implements OnInit{
+export class DataPricesComponent implements OnInit {
   brandService = inject(BrandsService);
   brands: Brand[] = [];
   onBrand: boolean = true;
   onCategory: boolean = false;
-  brandSelected: Brand = new Brand('','','');
-  categorySelected: Category = new Category('','');
+  brandSelected: Brand = new Brand('', '', '');
+  categorySelected: Category = new Category('', '');
   categories: Category[] = [];
   categoryService = inject(CategoriesService);
   productService = inject(ProductService);
   products: Product[] = [];
   pricesService = inject(PricesService);
-  prices: PriceXproduct = new PriceXproduct('','',0,0,0,0,0,0,0);
+  prices: PriceXproduct = new PriceXproduct('', '', 0, 0, 0, 0, 0, 0, 0);
   optionService = inject(OptionsService);
   options: Options[] = [];
   progressService = inject(ProgressService);
@@ -37,65 +37,80 @@ export class DataPricesComponent implements OnInit{
   async ngOnInit() {
     await this.getBrands();
     await this.getCategories();
-    this.progressService.returnNumber().subscribe(numberAux => {
+    this.progressService.returnNumber().subscribe((numberAux) => {
       this.progress = numberAux;
-    })
+    });
   }
-  selectByCategory(){
+  selectByCategory() {
     this.onBrand = false;
     this.onCategory = true;
   }
 
-  selectByBrand(){
+  selectByBrand() {
     this.onBrand = true;
     this.onCategory = false;
   }
 
-  async getBrands(){
-    (await this.brandService.readBrands()).subscribe(brands => {
+  async getBrands() {
+    (await this.brandService.readBrands()).subscribe((brands) => {
       this.brands = brands;
     });
-    if(this.brands.length > 0){
+    if (this.brands.length > 0) {
       this.brandSelected = this.brands[0];
     }
   }
 
-  async getCategories(){
-    (await this.categoryService.readCategories()).subscribe(categoriesAux => {
+  async getCategories() {
+    (await this.categoryService.readCategories()).subscribe((categoriesAux) => {
       this.categories = categoriesAux;
     });
-    if(this.categories.length > 0){
+    if (this.categories.length > 0) {
       this.categorySelected = this.categories[0];
     }
   }
 
-  async getProducts(){ ///TO DO PAGE NUMBER ON READ PRODUCTS
-    if(this.onBrand && !this.onCategory){
-      (await this.productService.readProducts('brand', this.brandSelected.name)).subscribe(products => {
+  async getProducts() {
+    ///TO DO PAGE NUMBER ON READ PRODUCTS
+    if (this.onBrand && !this.onCategory) {
+      (
+        await this.productService.readProducts('brand', this.brandSelected.name)
+      ).subscribe((products) => {
         this.products = products;
       });
-    }else if(this.onCategory && !this.onBrand){
-      (await this.productService.readProducts('category', this.categorySelected.name)).subscribe(products => {
+    } else if (this.onCategory && !this.onBrand) {
+      (
+        await this.productService.readProducts(
+          'category',
+          this.categorySelected.name
+        )
+      ).subscribe((products) => {
         this.products = products;
       });
     }
   }
 
-  async modifyPrices(percentage: number, option: string){
-    for(let i = 0; i<this.products.length; i++){
-      (await this.optionService.readProductOptions(this.products[i].id)).subscribe(options => {
+  async modifyPrices(percentage: number, option: string) {
+    for (let i = 0; i < this.products.length; i++) {
+      (
+        await this.optionService.readProductOptions(this.products[i].id)
+      ).subscribe((options) => {
         this.options = options;
       });
-      if(this.options.length > 0){
-        await this.getOptionPrices(this.options, percentage, option);
+      if (this.options.length > 0) {
+        await this.getOptionPrices(
+          this.options,
+          percentage,
+          option,
+          this.products[i].brand
+        );
       }
-      let progressAux = ((i * 100) / this.products.length);
-      this.progressService.updateNumber(progressAux).subscribe(()=>{});
+      let progressAux = (i * 100) / this.products.length;
+      this.progressService.updateNumber(progressAux).subscribe(() => {});
     }
-    this.progressService.updateNumber(100).subscribe(()=>{});
+    this.progressService.updateNumber(100).subscribe(() => {});
   }
 
-  async getPrice(id: string){
+  async getPrice(id: string) {
     try {
       const data = await this.pricesService.getTableByProduct(id).toPromise();
       console.log(data);
@@ -106,88 +121,102 @@ export class DataPricesComponent implements OnInit{
     }
   }
 
-  async getOptionPrices(halfArray: Options[], percentage: number, option: string){
-    
-    for(let i = 0; i<halfArray.length; i++){
+  async getOptionPrices(
+    halfArray: Options[],
+    percentage: number,
+    option: string,
+    brand: string
+  ) {
+    for (let i = 0; i < halfArray.length; i++) {
       let pricesAux = await this.getPrice(halfArray[i].id);
-      if(pricesAux != undefined){
+      if (pricesAux != undefined) {
         this.prices = pricesAux;
       }
-      if(option == 'increase'){
-        
-        this.prices.costPrice = this.prices.costPrice + (this.prices.costPrice * percentage);
-        this.prices.priceList1 = (this.prices.costPrice * 1.29);
-        this.prices.priceList2 = (this.prices.costPrice * 1.35);
-        this.prices.priceList3 = (this.prices.costPrice * 1.50);
-        this.prices.priceList4 = (this.prices.costPrice * 1.70);
-        this.prices.priceListE = (this.prices.costPrice * 1.16);
-        this.prices.priceListG = (this.prices.costPrice * 1.22);
-
-      }else if(option == 'decrease'){
-        this.prices.costPrice = (this.prices.costPrice - (this.prices.costPrice * percentage));  
-        this.prices.priceList1 = (this.prices.costPrice * 1.29);
-        this.prices.priceList2 = (this.prices.costPrice * 1.35);
-        this.prices.priceList3 = (this.prices.costPrice * 1.50);
-        this.prices.priceList4 = (this.prices.costPrice * 1.70);
-        this.prices.priceListE = (this.prices.costPrice * 1.16);
-        this.prices.priceListG = (this.prices.costPrice * 1.22);
+      if (option == 'increase') {
+        this.prices.costPrice =
+          this.prices.costPrice + (this.prices.costPrice * percentage) / 100;
+        this.prices.priceList1 = this.prices.costPrice * 1.29;
+        this.prices.priceList2 = this.prices.costPrice * 1.35;
+        this.prices.priceList3 = this.prices.costPrice * 1.5;
+        this.prices.priceList4 = this.prices.costPrice * 1.7;
+        this.prices.priceListE = this.prices.costPrice * 1.16;
+        this.prices.priceListG = this.prices.costPrice * 1.22;
+        if (brand.toLowerCase() !== 'tel') {
+          this.prices.priceList1 = this.prices.costPrice * 1.35;
+          this.prices.priceListG = this.prices.costPrice * 1.35;
+        }
+      } else if (option == 'decrease') {
+        this.prices.costPrice =
+          this.prices.costPrice - (this.prices.costPrice * percentage) / 100;
+        this.prices.priceList1 = this.prices.costPrice * 1.29;
+        this.prices.priceList2 = this.prices.costPrice * 1.35;
+        this.prices.priceList3 = this.prices.costPrice * 1.5;
+        this.prices.priceList4 = this.prices.costPrice * 1.7;
+        this.prices.priceListE = this.prices.costPrice * 1.16;
+        this.prices.priceListG = this.prices.costPrice * 1.22;
+        if (brand.toLowerCase() !== 'tel') {
+          this.prices.priceList1 = this.prices.costPrice * 1.35;
+          this.prices.priceListG = this.prices.costPrice * 1.35;
+        }
       }
-      await this.pricesService.updateProduct(this.prices.id, this.prices).toPromise();
+      await this.pricesService
+        .updateProduct(this.prices.id, this.prices)
+        .toPromise();
     }
   }
 
-  async changePrices(option: string){
+  async changePrices(option: string) {
     let inpAux = document.getElementById('percentageInp') as HTMLInputElement;
-    if(inpAux){
+    if (inpAux) {
       let percentage = parseFloat(inpAux.value);
-      if(percentage > 0){
+      if (percentage > 0) {
         let confirmed = confirm('Cambiar los precios en ' + percentage + '% ?');
-        if(confirmed){
+        if (confirmed) {
           await this.getProducts();
           await this.modifyPrices(percentage, option);
         }
       }
     }
   }
-  searchBrandByID(brandID: string){
+  searchBrandByID(brandID: string) {
     let i = 0;
     let access = false;
 
-    while(i<this.brands.length && !access){
-      if(this.brands[i].name == brandID){
+    while (i < this.brands.length && !access) {
+      if (this.brands[i].name == brandID) {
         access = true;
-      }else{
+      } else {
         i++;
       }
     }
-    if(access){
+    if (access) {
       return this.brands[i];
-    }else{
+    } else {
       return this.brandSelected;
     }
   }
-  searchCategoryByName(name: string){
+  searchCategoryByName(name: string) {
     let i = 0;
     let access = false;
 
-    while(i<this.categories.length && !access){
-      if(this.categories[i].name == name){
+    while (i < this.categories.length && !access) {
+      if (this.categories[i].name == name) {
         access = true;
-      }else{
+      } else {
         i++;
       }
     }
-    if(access){
+    if (access) {
       return this.categories[i];
-    }else{
+    } else {
       return this.categorySelected;
     }
   }
-  selectBrand(event: Event){
+  selectBrand(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.brandSelected = this.searchBrandByID(selectedValue);
   }
-  selectCategory(event: Event){
+  selectCategory(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
     this.categorySelected = this.searchCategoryByName(selectedValue);
   }
