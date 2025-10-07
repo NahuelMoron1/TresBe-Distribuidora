@@ -1,24 +1,23 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Product } from 'src/app/models/Product';
-import { ProductService } from 'src/app/services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { Feature } from 'src/app/models/Feature';
-import { FeatureService } from 'src/app/services/feature.service';
-import { CartService } from 'src/app/services/cart.service';
-import { PricesService } from 'src/app/services/prices.service';
-import { PriceXproduct } from 'src/app/models/PriceXproduct';
-import { User } from 'src/app/models/User';
-import { OptionsService } from 'src/app/services/options.service';
 import { Options } from 'src/app/models/Options';
-import { UserService } from 'src/app/services/user.service';
+import { Product } from 'src/app/models/Product';
 import { PublicUser } from 'src/app/models/PublicUser';
+import { CartService } from 'src/app/services/cart.service';
 import { CookieService } from 'src/app/services/cookie.service';
+import { ErrorService } from 'src/app/services/error.service';
+import { FeatureService } from 'src/app/services/feature.service';
+import { OptionsService } from 'src/app/services/options.service';
+import { PricesService } from 'src/app/services/prices.service';
+import { ProductService } from 'src/app/services/product.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-    selector: 'app-product-item',
-    templateUrl: './product-item.component.html',
-    styleUrls: ['./product-item.component.css'],
-    standalone: false
+  selector: 'app-product-item',
+  templateUrl: './product-item.component.html',
+  styleUrls: ['./product-item.component.css'],
+  standalone: false,
 })
 export class ProductItemComponent implements OnInit {
   productService = inject(ProductService);
@@ -27,6 +26,7 @@ export class ProductItemComponent implements OnInit {
   featureService = inject(FeatureService);
   cartService = inject(CartService);
   optionService = inject(OptionsService);
+  errorService = inject(ErrorService);
   options: Options[] = [];
   optionSelected: Options = new Options('', '', '', 0);
   cartProducts: Array<Product> = [];
@@ -44,38 +44,47 @@ export class ProductItemComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     window.scrollTo(0, 0); //Se pone la vista de la pantalla en la forma original, en la parte de arriba
-    (await this.cookieService.getUser()).subscribe(data => {
+    (await this.cookieService.getUser()).subscribe((data) => {
       this.user = data;
       this.priceList = this.user.priceList;
     });
     const id = this.activeRoute.snapshot.params['id']; //Se busca mediante la ruta el ID del producto al que se quiere acceder
     this.productSelected = await this.productService.returnOneProduct(id); //Se busca el producto con el ID del parametro y se retorna desde la BDD
-    (await this.optionService.readProductOptions(this.productSelected.id)).subscribe(options => { //Se leen las opciones asignadas que tiene este producto
+    (
+      await this.optionService.readProductOptions(this.productSelected.id)
+    ).subscribe((options) => {
+      //Se leen las opciones asignadas que tiene este producto
       this.options = options;
-      if (options.length > 0) { //Se asigna al producto la primer opcion que se encuentra para que, en caso de no elegir opcion, tenga esa primera opcion como default
+      if (options.length > 0) {
+        //Se asigna al producto la primer opcion que se encuentra para que, en caso de no elegir opcion, tenga esa primera opcion como default
         this.getSelected();
         this.productSelected.optionSelected = this.optionSelected.name;
       }
     });
-    this.productSelected.priceDiscount = (this.productSelected.price - (this.productSelected.price * this.productSelected.discount)); //Se calcula el descuento(Si es que tiene)
+    this.productSelected.priceDiscount =
+      this.productSelected.price -
+      this.productSelected.price * this.productSelected.discount; //Se calcula el descuento(Si es que tiene)
 
-    (await this.featureService.readProductFeatures(this.productSelected.id)).subscribe(features => { //Se leen las caracteristicas asociadas que tiene el producto
+    (
+      await this.featureService.readProductFeatures(this.productSelected.id)
+    ).subscribe((features) => {
+      //Se leen las caracteristicas asociadas que tiene el producto
       this.productSelected.features = features;
     });
 
-    this.cartService.getProducts().subscribe(cartProducts => { //Se leen los productos del carrito, para saber si este producto que se esta viendo ya esta asignado al carrito o no
+    this.cartService.getProducts().subscribe((cartProducts) => {
+      //Se leen los productos del carrito, para saber si este producto que se esta viendo ya esta asignado al carrito o no
       this.cartProducts = cartProducts;
     });
     this.isOnCart();
     this.options = this.sortDimensions(this.options);
     await this.isAdmin();
-    if(this.admin){
+    if (this.admin) {
       const access = await this.cookieService.setSuperAdmin(this.user.email);
-      if(access){
+      if (access) {
         this.prices.unshift('costo', 'E', 'G');
       }
     }
-
   }
   getSelected() {
     let optionAux = localStorage.getItem('optionSelected');
@@ -87,18 +96,26 @@ export class ProductItemComponent implements OnInit {
     localStorage.removeItem('optionSelected');
   }
   async isAdmin() {
-    (await this.cookieService.tokenExistTC('admin_token')).subscribe(data => {
+    (await this.cookieService.tokenExistTC('admin_token')).subscribe((data) => {
       this.admin = data;
     });
   }
-  async addToCart() { //Se invoca a esta funcion cuando el usuario clickea el boton de añadir al carrito
+  async addToCart() {
+    if (this.productSelected.price === 0) {
+      return this.errorService.handleError(
+        undefined,
+        'No podes agregar al carrito un producto que no tiene precio'
+      );
+    }
+    //Se invoca a esta funcion cuando el usuario clickea el boton de añadir al carrito
     this.productSelected.quantity = 1; //Se asigna cantidad 1 para evitar errores en la base de datos de tipo null y demas
     let productAux = this.productSelected;
     let productCart = await this.isOnCart();
     productAux.optionSelected = this.optionSelected.name;
     let latestID = productAux.id;
     productAux.id = this.generateRandomId(16);
-    if (productCart != null) { //Se verifica que este producto no este en el carrito. Si es distinto de NULL esta en el carrito
+    if (productCart != null) {
+      //Se verifica que este producto no este en el carrito. Si es distinto de NULL esta en el carrito
       if (this.differentOption(productCart)) {
         this.cartService.addNewProduct(productAux, latestID); //se agrega el producto a la BDD
         this.onCart = true;
@@ -111,7 +128,10 @@ export class ProductItemComponent implements OnInit {
     }
 
     if (this.options.length > 0) {
-      localStorage.setItem('optionSelected', JSON.stringify(this.optionSelected));
+      localStorage.setItem(
+        'optionSelected',
+        JSON.stringify(this.optionSelected)
+      );
       location.reload();
     }
   }
@@ -125,26 +145,37 @@ export class ProductItemComponent implements OnInit {
   formatNumber(number: number): string {
     return number.toLocaleString(); // Esto añadirá separadores de miles
   }
-  async getOptionSelected() {  //Se trae desde el html la opcion seleccionada
+  async getOptionSelected() {
+    //Se trae desde el html la opcion seleccionada
     let optionAux = this.optionSelected;
     if (optionAux) {
-      let optionAux1 = await this.optionService.returnProductByName(this.optionSelected.id);
+      let optionAux1 = await this.optionService.returnProductByName(
+        this.optionSelected.id
+      );
       if (optionAux1 != null) {
         this.optionSelected = optionAux1;
-        this.productSelected.price = await this.productService.setProductPrice(this.optionSelected.id);
-        this.productSelected.priceDiscount = (this.productSelected.price - (this.productSelected.price * this.productSelected.discount));
+        this.productSelected.price = await this.productService.setProductPrice(
+          this.optionSelected.id
+        );
+        this.productSelected.priceDiscount =
+          this.productSelected.price -
+          this.productSelected.price * this.productSelected.discount;
       }
     }
   }
-  async isOnCart() { //Verifica si el producto se encuentra o no se encuentra en el carrito
+  async isOnCart() {
+    //Verifica si el producto se encuentra o no se encuentra en el carrito
     await this.getOptionSelected(); //Se busca la opcion seleccionada
-    let cartAux = localStorage.getItem("cart"); //Se lee el carrito
-    if (cartAux) { //Si hay un carrito
+    let cartAux = localStorage.getItem('cart'); //Se lee el carrito
+    if (cartAux) {
+      //Si hay un carrito
       let cart: Array<Product> = JSON.parse(cartAux); //Se asigna ese carrito a una variable de esta clase
       let i = 0; //Para while
       let access = false; //Para while
-      while (i < cart.length && !access) { //Mientras no se exceda la cantidad de elementos del carrito y no se consiga el acceso continuara iterando
-        if (cart[i].name == this.productSelected.name) { //Si el producto del carrito tiene el mismo ID que el producto a agregar significa que el producto esta repetido
+      while (i < cart.length && !access) {
+        //Mientras no se exceda la cantidad de elementos del carrito y no se consiga el acceso continuara iterando
+        if (cart[i].name == this.productSelected.name) {
+          //Si el producto del carrito tiene el mismo ID que el producto a agregar significa que el producto esta repetido
           if (this.differentOption(cart[i])) {
             this.onCart = false;
             i++;
@@ -168,9 +199,9 @@ export class ProductItemComponent implements OnInit {
     }
   }
 
-
   generateRandomId(length: number = 16): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     const charactersLength = characters.length;
 
@@ -194,8 +225,7 @@ export class ProductItemComponent implements OnInit {
     });
   }
 
-
-  extractParts(value: string): { whole: number, fraction: number } {
+  extractParts(value: string): { whole: number; fraction: number } {
     const parts = value.split(' ');
     let whole = 0;
     let fraction = 0;
@@ -218,7 +248,6 @@ export class ProductItemComponent implements OnInit {
     return { whole, fraction };
   }
 
-
   parseFraction(fraction: string): number {
     const parts = fraction.split('/');
     if (parts.length !== 2) {
@@ -233,15 +262,22 @@ export class ProductItemComponent implements OnInit {
   }
   async updatePriceList(priceList: string) {
     if (this.admin) {
-      this.productSelected.price = await this.productService.selectPriceList(this.optionSelected.id, priceList);
+      this.productSelected.price = await this.productService.selectPriceList(
+        this.optionSelected.id,
+        priceList
+      );
     }
   }
 
   updateSearchResults() {
     this.optionsSearched = [];
-    if (this.searchTerm != "") {
+    if (this.searchTerm != '') {
       for (let i = 0; i < this.options.length; i++) {
-        if (this.options[i].name.toUpperCase().includes(this.searchTerm.toUpperCase())) {
+        if (
+          this.options[i].name
+            .toUpperCase()
+            .includes(this.searchTerm.toUpperCase())
+        ) {
           this.optionsSearched.push(this.options[i]);
         }
       }
@@ -257,5 +293,4 @@ export class ProductItemComponent implements OnInit {
     }
     await this.isOnCart();
   }
-
 }

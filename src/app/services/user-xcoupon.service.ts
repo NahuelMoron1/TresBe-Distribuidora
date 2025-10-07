@@ -1,20 +1,25 @@
-import { Injectable } from '@angular/core';
-import { UserXcoupon } from '../models/UserXcoupon';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserXcoupon } from '../models/UserXcoupon';
+import { ErrorService } from './error.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserXcouponService {
   private myAppUrl: string;
   private myApiUrl: string;
+  private errorService = inject(ErrorService);
+
   userXcoupon: UserXcoupon = new UserXcoupon('', '', '');
-  _userXcoupon: BehaviorSubject<UserXcoupon> = new BehaviorSubject<UserXcoupon>(this.userXcoupon);
+  _userXcoupon: BehaviorSubject<UserXcoupon> = new BehaviorSubject<UserXcoupon>(
+    this.userXcoupon
+  );
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = 'api/userXcoupon/'
+    this.myApiUrl = 'api/userXcoupon/';
   }
   async readUser(userID: string, couponID: string) {
     let userAux = await this.getUserTC(userID, couponID);
@@ -31,25 +36,38 @@ export class UserXcouponService {
       const data = await this.getUser(userID, couponID).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo precios por producto'
+      );
     }
   }
   getUser(userID: string, couponID: string): Observable<UserXcoupon> {
-    return this.http.get<UserXcoupon>(this.myAppUrl + this.myApiUrl + userID + '/' + couponID);
+    return this.http.get<UserXcoupon>(
+      this.myAppUrl + this.myApiUrl + userID + '/' + couponID
+    );
   }
   deleteUser(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, {
+      withCredentials: true,
+    });
   }
   deleteUsers(): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, {
+      withCredentials: true,
+    });
   }
   saveUser(productAux: UserXcoupon): Observable<void> {
-    return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, productAux, { withCredentials: true });
+    return this.http.post<void>(
+      `${this.myAppUrl}${this.myApiUrl}`,
+      productAux,
+      { withCredentials: true }
+    );
   }
   updateUser(id: string, productAux: UserXcoupon): Observable<void> {
-    return this.http.patch<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, productAux);
+    return this.http.patch<void>(
+      `${this.myAppUrl}${this.myApiUrl}${id}`,
+      productAux
+    );
   }
 }

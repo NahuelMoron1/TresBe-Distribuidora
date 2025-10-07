@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { SkyToastService, SkyToastType } from '@skyux/toast';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ErrorService {
-  /*public toastSvc = inject(SkyToastService);
+  public toastSvc = inject(SkyToastService);
 
   public static errorText(err: any) {
     return UtilsService.errorText(err);
@@ -19,15 +21,17 @@ export class ErrorService {
     UtilsService.openToast(this.toastSvc, errMessage, SkyToastType.Danger);
 
     if (!payload) {
-      return;
+      return undefined;
     }
 
     const postError = ErrorService.postError(err.error.message);
 
     if (postError) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      SlackService.postErrorNotification(payload).subscribe(() => {});
+      //SlackService.postErrorNotification(payload).subscribe(() => {});
     }
+
+    return undefined;
   }
 
   public static postError(err: any) {
@@ -55,7 +59,7 @@ export class ErrorService {
       // don't post error for timeouts
       return false;
     }*/
-  /*const errText = ErrorService.errorText(err);
+    const errText = ErrorService.errorText(err);
     const suppressErrorMsg = ErrorService.suppressErrorMessage(errText);
     if (suppressErrorMsg) {
       return false;
@@ -82,5 +86,5 @@ export class ErrorService {
 
     // Check for regex pattern match
     return regexIgnorePatterns.some((regex) => regex.test(msg));
-  }*/
+  }
 }

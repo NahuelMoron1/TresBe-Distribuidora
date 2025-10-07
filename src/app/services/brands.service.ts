@@ -1,22 +1,29 @@
-import { Injectable } from '@angular/core';
-import { Brand } from '../models/Brand';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Brand } from '../models/Brand';
+import { ErrorService } from './error.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BrandsService {
   private myAppUrl: string;
   private myApiUrl: string;
+  private errorService = inject(ErrorService);
+
   brandsArray: Array<Brand> = [];
-  _brandsArray: BehaviorSubject<Brand[]> = new BehaviorSubject<Brand[]>(this.brandsArray);
+  _brandsArray: BehaviorSubject<Brand[]> = new BehaviorSubject<Brand[]>(
+    this.brandsArray
+  );
   brandSelected: string = 'all';
-  _brandSelected: BehaviorSubject<string> = new BehaviorSubject<string>(this.brandSelected);
+  _brandSelected: BehaviorSubject<string> = new BehaviorSubject<string>(
+    this.brandSelected
+  );
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = 'api/brands/'
+    this.myApiUrl = 'api/brands/';
   }
 
   async readBrands() {
@@ -45,10 +52,10 @@ export class BrandsService {
       const data = await this.getBrands().toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo precios por producto'
+      );
     }
   }
 
@@ -59,15 +66,26 @@ export class BrandsService {
     return this.http.get<Brand>(this.myAppUrl + this.myApiUrl + id);
   }
   deleteBrand(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, {
+      withCredentials: true,
+    });
   }
   deleteBrands(): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, {
+      withCredentials: true,
+    });
   }
   saveBrand(productAux: Brand): Observable<void> {
-    return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, productAux, { withCredentials: true });
+    return this.http.post<void>(
+      `${this.myAppUrl}${this.myApiUrl}`,
+      productAux,
+      { withCredentials: true }
+    );
   }
   updateBrand(id: string, productAux: Brand): Observable<void> {
-    return this.http.patch<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, productAux);
+    return this.http.patch<void>(
+      `${this.myAppUrl}${this.myApiUrl}${id}`,
+      productAux
+    );
   }
 }

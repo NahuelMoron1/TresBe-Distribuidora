@@ -33,14 +33,13 @@ export class ProductsListComponent implements OnInit {
   brandService = inject(BrandsService);
   admin: PublicUser = new PublicUser('', '', '', '', false, '');
   cookieService = inject(CookieService);
-  //toastSvc = inject(SkyToastService);
+
   async ngOnInit() {
     window.scrollTo(0, 0);
     await this.filters();
     (await this.cookieService.getAdmin()).subscribe((data) => {
       this.admin = data;
     });
-    //UtilsService.openToast(this.toastSvc, 'HELLOOO', SkyToastType.Success);
     ///this.hasCostPrice();
   }
   goToModify(productID: string) {
