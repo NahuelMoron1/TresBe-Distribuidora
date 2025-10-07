@@ -21,9 +21,10 @@
   border: 1px solid black;
   font-family: sans-serif;
   letter-spacing: 2px;
-  font-size: 13px;
+  font-size: 12px;
   text-align: center;
   width: 15vh;
+  height: 3vi;
   padding: 1vi;
   cursor: pointer;
   transition: background-color 1s ease;
