@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { SkyToastService, SkyToastType } from '@skyux/toast';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
-  /*public static openToast(
+  public static openToast(
     toastService: SkyToastService,
     text: string,
     toastType: SkyToastType
@@ -69,5 +70,5 @@ export class UtilsService {
   public static isValidInput(input: string) {
     const regex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s@]*$/;
     return regex.test(input);
-  }*/
+  }
 }

@@ -9,6 +9,7 @@ import { PublicUser } from '../models/PublicUser';
 import { BrandsService } from './brands.service';
 import { CategoriesService } from './categories.service';
 import { CookieService } from './cookie.service';
+import { ErrorService } from './error.service';
 import { OptionsService } from './options.service';
 import { PricesService } from './prices.service';
 @Injectable({
@@ -17,9 +18,10 @@ import { PricesService } from './prices.service';
 export class ProductService {
   private myAppUrl: string;
   private myApiUrl: string;
-  optionService = inject(OptionsService);
-  brandService = inject(BrandsService);
-  categoryService = inject(CategoriesService);
+  private optionService = inject(OptionsService);
+  private brandService = inject(BrandsService);
+  private categoryService = inject(CategoriesService);
+  private errorService = inject(ErrorService);
   categorySelected: string = '';
   brandSelected: string = 'all';
   pageNumber: number = 1;
@@ -124,10 +126,10 @@ export class ProductService {
       const data = await this.getProductsByCategory(category).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por categoria'
+      );
     }
   }
 
@@ -136,10 +138,10 @@ export class ProductService {
       const data = await this.getProductsByBrand(brand).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por marca'
+      );
     }
   }
 
@@ -148,10 +150,10 @@ export class ProductService {
       const data = await this.getRandomProducts().toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos random'
+      );
     }
   }
 
@@ -251,10 +253,10 @@ export class ProductService {
         .toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo precios por producto'
+      );
     }
   }
   async setProducts(page: number): Promise<Product[] | undefined> {
@@ -262,10 +264,10 @@ export class ProductService {
       const data = await this.getProducts(page).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por pagina'
+      );
     }
   }
 
@@ -280,10 +282,10 @@ export class ProductService {
       const data = await this.getProductSearch(name).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por busqueda'
+      );
     }
   }
 
@@ -320,10 +322,7 @@ export class ProductService {
       const data = await this.getProduct(id).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(error, 'Error leyendo por producto');
     }
   }
 
@@ -341,10 +340,7 @@ export class ProductService {
       const data = await this.countProducts(value, type).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(error, 'Error contando productos');
     }
   }
   hasCostPrice() {

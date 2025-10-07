@@ -1,22 +1,26 @@
-import { Injectable } from '@angular/core';
-import { CartProduct } from '../models/CartProduct';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CartProduct } from '../models/CartProduct';
+import { ErrorService } from './error.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartProductService {
-
   private myAppUrl: string;
   private myApiUrl: string;
+  private errorService = inject(ErrorService);
+
   cartProducts: Array<CartProduct> = [];
-  _cartProducts: BehaviorSubject<CartProduct[]> = new BehaviorSubject<CartProduct[]>([]);
+  _cartProducts: BehaviorSubject<CartProduct[]> = new BehaviorSubject<
+    CartProduct[]
+  >([]);
 
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
-    this.myApiUrl = 'api/cart/'
+    this.myApiUrl = 'api/cart/';
   }
 
   getCartProductsAsObservable() {
@@ -60,10 +64,10 @@ export class CartProductService {
       }
       return null;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo precios por producto'
+      );
     }
   }
 
@@ -81,37 +85,50 @@ export class CartProductService {
       const data = await this.getCartProduct(id).toPromise();
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error obteniendo datos:', error.message);
-      }
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo precios por producto'
+      );
     }
   }
 
   getCartProducts(): Observable<CartProduct[]> {
-    return this.http.get<CartProduct[]>(this.myAppUrl + this.myApiUrl, { withCredentials: true });
+    return this.http.get<CartProduct[]>(this.myAppUrl + this.myApiUrl, {
+      withCredentials: true,
+    });
   }
   getCartProduct(id: string): Observable<CartProduct> {
     return this.http.get<CartProduct>(this.myAppUrl + this.myApiUrl + id);
   }
   getCartProductsByOrder(orderID: string): Observable<CartProduct[]> {
-    let urlAux = this.myAppUrl + this.myApiUrl + 'order/'
+    let urlAux = this.myAppUrl + this.myApiUrl + 'order/';
     return this.http.get<CartProduct[]>(urlAux + orderID);
   }
   getCartProductsByProduct(productID: string): Observable<CartProduct[]> {
-    let urlAux = this.myAppUrl + this.myApiUrl + 'product/'
+    let urlAux = this.myAppUrl + this.myApiUrl + 'product/';
     return this.http.get<CartProduct[]>(urlAux + productID);
   }
   deleteCartProduct(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, {
+      withCredentials: true,
+    });
   }
   deleteCartProducts(): Observable<void> {
-    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, { withCredentials: true });
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}`, {
+      withCredentials: true,
+    });
   }
   saveCartProduct(productAux: CartProduct): Observable<void> {
-    return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, productAux, { withCredentials: true });
+    return this.http.post<void>(
+      `${this.myAppUrl}${this.myApiUrl}`,
+      productAux,
+      { withCredentials: true }
+    );
   }
   updateCartProduct(id: string, productAux: CartProduct): Observable<void> {
-    return this.http.patch<void>(`${this.myAppUrl}${this.myApiUrl}${id}`, productAux);
+    return this.http.patch<void>(
+      `${this.myAppUrl}${this.myApiUrl}${id}`,
+      productAux
+    );
   }
 }

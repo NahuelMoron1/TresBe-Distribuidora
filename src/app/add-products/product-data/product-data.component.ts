@@ -8,23 +8,25 @@ import { PriceXproduct } from 'src/app/models/PriceXproduct';
 import { Product } from 'src/app/models/Product';
 import { BrandsService } from 'src/app/services/brands.service';
 import { CategoriesService } from 'src/app/services/categories.service';
-import { CouponService } from 'src/app/services/coupon.service';
+import { ErrorService } from 'src/app/services/error.service';
 import { FeatureService } from 'src/app/services/feature.service';
 import { OptionsService } from 'src/app/services/options.service';
 import { PricesService } from 'src/app/services/prices.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
-    selector: 'app-product-data',
-    templateUrl: './product-data.component.html',
-    styleUrls: ['./product-data.component.css'],
-    standalone: false
+  selector: 'app-product-data',
+  templateUrl: './product-data.component.html',
+  styleUrls: ['./product-data.component.css'],
+  standalone: false,
 })
 export class ProductDataComponent implements OnInit {
   productService = inject(ProductService);
   pricesService = inject(PricesService);
   brandService = inject(BrandsService);
   categoriesService = inject(CategoriesService);
+  private errorService = inject(ErrorService);
+
   category: string = '';
   brand: string = '';
   brands: Brand[] = [];
@@ -226,12 +228,22 @@ export class ProductDataComponent implements OnInit {
     }
   }
 
-  addNewProduct() {
-    //La funcion solo sirve para cuando se va a agregar un nuevo producto, NO sirve para MODIFICAR
-    let productAux: Product | null = this.getItemsProduct();
-    if (productAux != null) {
-      this.productService.saveProduct(productAux).subscribe(() => {});
-      this.added = true; //Al estar en verdadero se activara el mensaje de producto cargado}
+  async addNewProduct() {
+    try {
+      //La funcion solo sirve para cuando se va a agregar un nuevo producto, NO sirve para MODIFICAR
+      let productAux: Product | null = this.getItemsProduct();
+      if (productAux != null) {
+        await this.productService.saveProduct(productAux).toPromise();
+        this.added = true; //Al estar en verdadero se activara el mensaje de producto cargado}
+        setTimeout(() => {
+          window.location.href = `/modify/product/${productAux.id}`;
+        }, 3000);
+      }
+    } catch (error) {
+      return this.errorService.handleError(
+        error,
+        'Error cargando nuevo producto'
+      );
     }
   }
 
@@ -257,16 +269,20 @@ export class ProductDataComponent implements OnInit {
     this.enableOrDisableInputs(); //Se llama a la funcion para que habilite la escritura de los input SOLO de producto
   }
 
-  modifyOneProduct() {
-    //Funcion que se invoca cuando se apreta el boton de cambiar, para este paso ya se ha apretado el boton de modificar
-    let productAux: Product | null = this.getItemsProduct(); //Se crea un nuevo producto y se le asignan los input a travez de esa funcion
-    if (productAux != null) {
-      this.productService
-        .updateProduct(this.productID, productAux)
-        .subscribe(() => {});
-      this.toModify = false; //Despues de modificar todo, el a modificar queda en falso, ya que ya modificó lo que quiso y lo guardó
-      this.modified = true; //Despues de modificar todo, el modificado queda en verdadero, para que el html detecte esto y ponga el mensaje de modificacion correcta
-      this.enableOrDisableInputs(); //Se vuelve a cambiar la habilitacion de los inputs del producto, en este caso se van a deshabilitar nuevamente
+  async modifyOneProduct() {
+    try {
+      //Funcion que se invoca cuando se apreta el boton de cambiar, para este paso ya se ha apretado el boton de modificar
+      let productAux: Product | null = this.getItemsProduct(); //Se crea un nuevo producto y se le asignan los input a travez de esa funcion
+      if (productAux != null) {
+        await this.productService
+          .updateProduct(this.productID, productAux)
+          .toPromise();
+        this.toModify = false; //Despues de modificar todo, el a modificar queda en falso, ya que ya modificó lo que quiso y lo guardó
+        this.modified = true; //Despues de modificar todo, el modificado queda en verdadero, para que el html detecte esto y ponga el mensaje de modificacion correcta
+        this.enableOrDisableInputs(); //Se vuelve a cambiar la habilitacion de los inputs del producto, en este caso se van a deshabilitar nuevamente
+      }
+    } catch (error) {
+      return this.errorService.handleError(error, 'Error modificando producto');
     }
   }
 
@@ -309,8 +325,10 @@ export class ProductDataComponent implements OnInit {
       console.log(data);
       return data;
     } catch (error) {
-      console.error('Error obteniendo datos:', error);
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por categoria'
+      );
     }
   }
 
@@ -365,8 +383,10 @@ export class ProductDataComponent implements OnInit {
       console.log(data);
       return data;
     } catch (error) {
-      console.error('Error obteniendo datos:', error);
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      return this.errorService.handleError(
+        error,
+        'Error leyendo productos por categoria'
+      );
     }
   }
 
@@ -432,7 +452,7 @@ export class ProductDataComponent implements OnInit {
     }
   }
 
-  modifyFeatures(feature: Feature, index: number) {
+  async modifyFeatures(feature: Feature, index: number) {
     if (this.features.length > 0) {
       if (feature != undefined && feature != null) {
         this.featureModify = true;
@@ -442,7 +462,7 @@ export class ProductDataComponent implements OnInit {
         if (featureName.length > 0 && featureValue.length > 0) {
           feature.name = featureName;
           feature.value = featureValue;
-          this.featureService.updateOneFeature(index, feature);
+          await this.featureService.updateOneFeature(index, feature);
           this.featureModify = false;
         } else {
           alert('No podes dejar ningun campo vacío');
@@ -465,12 +485,12 @@ export class ProductDataComponent implements OnInit {
       valueAux.removeAttribute('disabled');
     }
   }
-  deleteFeature(featureID: string | undefined, index: number) {
+  async deleteFeature(featureID: string | undefined, index: number) {
     if (featureID != undefined) {
-      this.featureService.deleteOneFeature(featureID, index);
+      await this.featureService.deleteOneFeature(featureID, index);
     }
   }
-  addFeature() {
+  async addFeature() {
     let featureName = this.getString('featureInp');
     let featureValue = this.getString('featureValueInp');
     if (this.productID.length > 0) {
@@ -481,7 +501,7 @@ export class ProductDataComponent implements OnInit {
           featureValue,
           this.productID
         );
-        this.featureService.createFeature(featureAux);
+        await this.featureService.createFeature(featureAux);
       } else {
         alert('No podes dejar ningun campo vacío');
       }
@@ -513,16 +533,23 @@ export class ProductDataComponent implements OnInit {
           'update'
         ); //Mismo paso que el anterior pero con las listas de precios
         if (pricesAux != null) {
-          await this.pricesService
-            .updateProduct(pricesAux.id, pricesAux)
-            .toPromise();
-          await this.optionService.updateOneOption(
-            index,
-            optionAux,
-            optionOldID
-          );
-          localStorage.setItem('updated', JSON.stringify(true));
-          location.reload();
+          try {
+            await this.pricesService
+              .updateProduct(pricesAux.id, pricesAux)
+              .toPromise();
+            await this.optionService.updateOneOption(
+              index,
+              optionAux,
+              optionOldID
+            );
+            localStorage.setItem('updated', JSON.stringify(true));
+            location.reload();
+          } catch (error) {
+            return this.errorService.handleError(
+              error,
+              'Error modificando precio de producto'
+            );
+          }
         }
       } else {
         alert('No podes dejar el campo de nombre de opción vacío');
@@ -531,9 +558,16 @@ export class ProductDataComponent implements OnInit {
       alert('No hay opciones para modificar');
     }
   }
-  addOption() {
+  async addOption() {
     let optionName = this.getString('optionInp');
     let optionStock = this.getNumber('stockInp');
+    if (this.productID.length <= 0) {
+      alert(
+        'Para agregar una opción primero debe completar la carga de un producto'
+      );
+      window.scrollTo(0, 0);
+      return;
+    }
     if (optionName.length > 0) {
       let optionAux = new Options(
         this.generateRandomId(16),
@@ -546,8 +580,17 @@ export class ProductDataComponent implements OnInit {
         'add'
       );
       if (pricesAux != null) {
-        this.optionService.createOption(optionAux);
-        this.pricesService.saveProduct(pricesAux).subscribe(() => {});
+        try {
+          const created = await this.optionService.createOption(optionAux);
+          if (created) {
+            await this.pricesService.saveProduct(pricesAux).toPromise();
+          }
+        } catch (error) {
+          return this.errorService.handleError(
+            error,
+            'Error agregando el precio del producto'
+          );
+        }
       }
     } else {
       alert('No podes dejar el campo de nombre de opción vacío');
@@ -570,10 +613,10 @@ export class ProductDataComponent implements OnInit {
       return this.optionSelected;
     }
   }
-  deleteOption(optionSelected: Options) {
+  async deleteOption(optionSelected: Options) {
     if (this.options.length > 0) {
       if (optionSelected.id != undefined) {
-        this.optionService.deleteOneOption(optionSelected.id);
+        await this.optionService.deleteOneOption(optionSelected.id);
       }
     } else {
       alert('No hay opciones para eliminar');
@@ -610,6 +653,10 @@ export class ProductDataComponent implements OnInit {
   }
 
   async changePrices(option: string) {
+    if (this.allPrices.length <= 0) {
+      return alert('No hay precios para modificar');
+    }
+
     let inpAux = document.getElementById('percentageInp') as HTMLInputElement;
     if (inpAux) {
       let percentage = parseFloat(inpAux.value);
@@ -633,39 +680,46 @@ export class ProductDataComponent implements OnInit {
   }
 
   async modifyPrices(percentage: number, option: string) {
-    for (let i = 0; i < this.allPrices.length; i++) {
-      if (option == 'increase') {
-        this.allPrices[i].costPrice =
-          this.allPrices[i].costPrice +
-          (this.allPrices[i].costPrice * percentage) / 100;
-        this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.29;
-        this.allPrices[i].priceList2 = this.allPrices[i].costPrice * 1.35;
-        this.allPrices[i].priceList3 = this.allPrices[i].costPrice * 1.5;
-        this.allPrices[i].priceList4 = this.allPrices[i].costPrice * 1.7;
-        this.allPrices[i].priceListE = this.allPrices[i].costPrice * 1.16;
-        this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.22;
-        if (this.brand.toLowerCase() !== 'tel') {
-          this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.35;
-          this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.35;
+    try {
+      for (let i = 0; i < this.allPrices.length; i++) {
+        if (option == 'increase') {
+          this.allPrices[i].costPrice =
+            this.allPrices[i].costPrice +
+            (this.allPrices[i].costPrice * percentage) / 100;
+          this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.29;
+          this.allPrices[i].priceList2 = this.allPrices[i].costPrice * 1.35;
+          this.allPrices[i].priceList3 = this.allPrices[i].costPrice * 1.5;
+          this.allPrices[i].priceList4 = this.allPrices[i].costPrice * 1.7;
+          this.allPrices[i].priceListE = this.allPrices[i].costPrice * 1.16;
+          this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.22;
+          if (this.brand.toLowerCase() !== 'tel') {
+            this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.35;
+            this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.35;
+          }
+        } else if (option == 'decrease') {
+          this.allPrices[i].costPrice =
+            this.allPrices[i].costPrice -
+            (this.allPrices[i].costPrice * percentage) / 100;
+          this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.29;
+          this.allPrices[i].priceList2 = this.allPrices[i].costPrice * 1.35;
+          this.allPrices[i].priceList3 = this.allPrices[i].costPrice * 1.5;
+          this.allPrices[i].priceList4 = this.allPrices[i].costPrice * 1.7;
+          this.allPrices[i].priceListE = this.allPrices[i].costPrice * 1.16;
+          this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.22;
+          if (this.brand.toLowerCase() !== 'tel') {
+            this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.35;
+            this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.35;
+          }
         }
-      } else if (option == 'decrease') {
-        this.allPrices[i].costPrice =
-          this.allPrices[i].costPrice -
-          (this.allPrices[i].costPrice * percentage) / 100;
-        this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.29;
-        this.allPrices[i].priceList2 = this.allPrices[i].costPrice * 1.35;
-        this.allPrices[i].priceList3 = this.allPrices[i].costPrice * 1.5;
-        this.allPrices[i].priceList4 = this.allPrices[i].costPrice * 1.7;
-        this.allPrices[i].priceListE = this.allPrices[i].costPrice * 1.16;
-        this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.22;
-        if (this.brand.toLowerCase() !== 'tel') {
-          this.allPrices[i].priceList1 = this.allPrices[i].costPrice * 1.35;
-          this.allPrices[i].priceListG = this.allPrices[i].costPrice * 1.35;
-        }
+        await this.pricesService
+          .updateProduct(this.allPrices[i].id, this.allPrices[i])
+          .toPromise();
       }
-      await this.pricesService
-        .updateProduct(this.allPrices[i].id, this.allPrices[i])
-        .toPromise();
+    } catch (error) {
+      return this.errorService.handleError(
+        error,
+        'Error modificando precios de producto'
+      );
     }
   }
 }
