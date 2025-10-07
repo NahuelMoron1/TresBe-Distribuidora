@@ -67,9 +67,13 @@ export class ProductService {
     return productAux.priceDiscount;
   }
   async readProducts(type: string, value: string | null) {
-    (await this.cookieService.getUser()).subscribe((data) => {
-      this.user = data;
-    });
+    try {
+      (await this.cookieService.getUser()).subscribe((data) => {
+        this.user = data;
+      });
+    } catch (error) {
+      //nothing
+    }
     let productsAux;
     this.products = [];
     switch (type) {
