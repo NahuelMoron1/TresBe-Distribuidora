@@ -1,15 +1,19 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/User';
+import { ErrorService } from 'src/app/services/error.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-    selector: 'app-entry-data',
-    templateUrl: './entry-data.component.html',
-    styleUrls: ['./entry-data.component.css'],
-    standalone: false
+  selector: 'app-entry-data',
+  templateUrl: './entry-data.component.html',
+  styleUrls: ['./entry-data.component.css'],
+  standalone: false,
 })
 export class EntryDataComponent {
   userService = inject(UserService);
+  errorService = inject(ErrorService);
+  private router = inject(Router);
   incorrectEmail: boolean = false;
   incorrectPassword: boolean = false;
   somethingWrong: string = '';
@@ -18,18 +22,25 @@ export class EntryDataComponent {
   async validateUser() {
     /* Funcion principal que se va a utilizar cuando el usuario hace click en login. Reune a todas las demas funciones necesarias para
     validar que el ingreso del usuario al sistema sea el correcto, de no ser correcto informará al usuario cual es el error. */
-    let emailInp = document.getElementById("emailInp") as HTMLInputElement; //Se lee el email ingresado
-    let passwordInp = document.getElementById("passwordInp") as HTMLInputElement; //Se lee la contraseña ingresada
+    let emailInp = document.getElementById('emailInp') as HTMLInputElement; //Se lee el email ingresado
+    let passwordInp = document.getElementById(
+      'passwordInp'
+    ) as HTMLInputElement; //Se lee la contraseña ingresada
     let email = '';
     let password = '';
-    if (emailInp && passwordInp) { //Se verifica que tanto el email como la contraseña ingresadas por los inputs tengan algun valor
+    if (emailInp && passwordInp) {
+      //Se verifica que tanto el email como la contraseña ingresadas por los inputs tengan algun valor
       email = emailInp.value; //Se le asigna a la variable email el input de email ingresado
       password = passwordInp.value; //Se le asigna a la variable password el input de password ingresado
       let access = await this.userService.readLogin(email, password);
-      if (access) {
-        window.location.href = ''; //Se redirecciona al menu de inicio, con el usuario ya logueado
-      } else {
-        this.somethingWrong = 'El email o la contraseña son incorrectos';
+      try {
+        if (access) {
+          window.location.href = ''; //Se redirecciona al menu de inicio, con el usuario ya logueado
+        } else {
+          this.somethingWrong = 'El email o la contraseña son incorrectos';
+        }
+      } catch (error) {
+        return this.errorService.handleError(error, 'Error en login');
       }
     }
   }

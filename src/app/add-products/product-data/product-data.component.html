@@ -174,7 +174,7 @@
         </div>
         <select
           name=""
-          id=""
+          id="selectOptionAux"
           [(ngModel)]="optionTerm"
           (change)="selectOption(optionTerm)"
         >
@@ -211,15 +211,6 @@
             name="stockInpName"
             [value]="optionSelected.stock"
             id="modifyStockInp"
-          />
-        </div>
-        <div class="priceList">
-          <label for="modifyID">ID</label>
-          <input
-            type="text"
-            name="idInpName"
-            [value]="optionSelected.id"
-            id="modifyIdInp"
           />
         </div>
         <div id="buttons">

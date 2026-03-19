@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SkyToastService, SkyToastType } from '@skyux/toast';
+import { SlackService } from './slack.service';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -28,7 +29,7 @@ export class ErrorService {
 
     if (postError) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      //SlackService.postErrorNotification(payload).subscribe(() => {});
+      SlackService.postErrorNotification(payload).subscribe(() => {});
     }
 
     return undefined;
@@ -64,16 +65,12 @@ export class ErrorService {
     if (suppressErrorMsg) {
       return false;
     }
-
     return true;
   }
 
   private static suppressErrorMessage(msg: string) {
     // suppress these error messages, they are usually 400s from the server that we can safely ignore
-    const ignoreMessages = [
-      'No active attendants at the moment',
-      'El email o la contraseña es incorrecto',
-    ];
+    const ignoreMessages = [''];
 
     if (ignoreMessages.includes(msg)) {
       return true;
