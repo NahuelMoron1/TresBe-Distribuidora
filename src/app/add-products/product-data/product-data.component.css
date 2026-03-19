@@ -243,6 +243,10 @@ button:hover {
   }
 }
 
+#selectOptionAux {
+  height: fit-content;
+}
+
 /* Adaptabilidad para pantallas más pequeñas */
 @media (max-width: 600px) {
   .dataText,

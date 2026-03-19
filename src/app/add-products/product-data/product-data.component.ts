@@ -65,7 +65,7 @@ export class ProductDataComponent implements OnInit {
         this.category = this.categories[0].name;
       }
     });
-    (await this.brandService.readBrands()).subscribe((brands) => {
+    (await this.brandService.getBrands()).subscribe((brands) => {
       this.brands = brands; //Se leen las marcas para seleccionar
       if (!this.onModify) {
         this.brand = this.brands[0].name;
@@ -584,6 +584,7 @@ export class ProductDataComponent implements OnInit {
           const created = await this.optionService.createOption(optionAux);
           if (created) {
             await this.pricesService.saveProduct(pricesAux).toPromise();
+            location.reload();
           }
         } catch (error) {
           return this.errorService.handleError(
@@ -630,12 +631,12 @@ export class ProductDataComponent implements OnInit {
   }
   changeBrand(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.category = selectedValue;
+    this.brand = selectedValue;
   }
 
   changeCategory(event: Event) {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.brand = selectedValue;
+    this.category = selectedValue;
   }
 
   updateSearchResults() {
